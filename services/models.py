@@ -9,4 +9,3 @@ class Employee(models.Model):
     no_of_days = models.PositiveSmallIntegerField()
     days_worked = models.PositiveSmallIntegerField()
     Ot_hrs = models.PositiveSmallIntegerField()
-
