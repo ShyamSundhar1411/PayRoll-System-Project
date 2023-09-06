@@ -9,3 +9,33 @@ class Employee(models.Model):
     no_of_days = models.PositiveSmallIntegerField()
     days_worked = models.PositiveSmallIntegerField()
     Ot_hrs = models.PositiveSmallIntegerField()
+
+    def __str__(self):
+        return self.Emp_Name
+
+class Salary(models.Model):
+    emp  = models.ForeignKey('Employee', on_delete=models.CASCADE,)
+
+    # earnings
+    Basic = models.DecimalField(max_digits=10,decimal_places=2)
+    SA = models.DecimalField(max_digits=10,decimal_places=2)
+    HRA = models.DecimalField(max_digits=10,decimal_places=2)
+    PRA_gain = models.DecimalField(max_digits=10,decimal_places=2)
+    Overtime = models.DecimalField(max_digits=10,decimal_places=2)
+    W_F_P = models.DecimalField(max_digits=10,decimal_places=2)
+    Bonus = models.DecimalField(max_digits=10,decimal_places=2)
+
+    # deductions
+    LOP = models.DecimalField(max_digits=10,decimal_places=2)
+    PRA_loss = models.DecimalField(max_digits=10,decimal_places=2)
+    ESI = models.DecimalField(max_digits=10,decimal_places=2)
+    ID_Card =models.DecimalField(max_digits=10,decimal_places=2)
+
+    #salary
+    TOTAL_gain = models.DecimalField(max_digits=10,decimal_places=2)
+    GROSS_SALARY = models.DecimalField(max_digits=10,decimal_places=2)
+    TOTAL_loss = models.DecimalField(max_digits=10,decimal_places=2)
+    NET_SALARY = models.DecimalField(max_digits=10,decimal_places=2)
+
+    def __str__(self):
+        return self.emp.Emp_Name
