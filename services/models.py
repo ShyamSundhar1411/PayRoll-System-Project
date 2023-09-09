@@ -8,7 +8,7 @@ class Employee(models.Model):
     Department = models.CharField(max_length=100, choices=dept_Choices, default="DE")
     no_of_days = models.PositiveSmallIntegerField()
     days_worked = models.PositiveSmallIntegerField()
-    Ot_hrs = models.PositiveSmallIntegerField()
+    Ot_hrs = models.PositiveSmallIntegerField(null=True)
 
     def __str__(self):
         return self.Emp_Name
