@@ -2,6 +2,7 @@ import pandas as pd
 from .forms import ExcelUploadForm
 from .models import Employee, Salary
 from django.shortcuts import render, redirect
+import math  # Import the math module
 
 
 def home(request):
@@ -42,19 +43,21 @@ def home(request):
                         days_worked=row.get("days_worked", 0),
                         Ot_hrs=None if pd.isna(row["Ot_hrs"]) else int(row["Ot_hrs"]),
                     )
+                    employee.save()
 
                     salary = Salary.objects.create(
-                        Basic=row["Basic"],
-                        SA=row["SA"],
-                        HRA=row["HRA"],
-                        PRA_gain=row["PRA gain"],
-                        Overtime=row["OT"],
-                        W_F_P=row["W/F(P)"],
-                        Bonus=row["Bonus"],
-                        LOP=row["LOP"],
-                        PRA_loss=row["PRA_loss"],
-                        ESI=row["ESI"],
-                        ID_Card=row["ID Card"],
+                        emp=employee,
+                        Basic=row.get("Basic", 0) if not math.isnan(row["Basic"]) else 0,
+                        SA=row.get("SA", 0) if not math.isnan(row["SA"]) else 0,
+                        HRA=row.get("HRA", 0) if not math.isnan(row["HRA"]) else 0,
+                        PRA_gain=row.get("PRA gain", 0) if not math.isnan(row["PRA gain"]) else 0,
+                        Overtime=row.get("OT", 0) if not math.isnan(row["OT"]) else 0,
+                        W_F_P=row.get("W/F(P)", 0) if not math.isnan(row["W/F(P)"]) else 0,
+                        Bonus=row.get("Bonus", 0) if not math.isnan(row["Bonus"]) else 0,
+                        LOP=row.get("LOP", 0) if not math.isnan(row["LOP"]) else 0,
+                        PRA_loss=row.get("PRA_loss", 0) if not math.isnan(row["PRA_loss"]) else 0,
+                        ESI=row.get("ESI", 0) if not math.isnan(row["ESI"]) else 0,
+                        ID_Card=row.get("ID Card", 0) if not math.isnan(row["ID Card"]) else 0,
                     )
 
                     salary.TOTAL_gain = (
@@ -70,6 +73,7 @@ def home(request):
                         salary.LOP + salary.PRA_loss + salary.ESI + salary.ID_Card
                     )
                     salary.NET_SALARY = salary.GROSS_SALARY - salary.TOTAL_loss
+                    salary.save()
                 return redirect("success")
             else:
                 return render(
