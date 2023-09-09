@@ -21,21 +21,21 @@ class Salary(models.Model):
     SA = models.DecimalField(max_digits=10,decimal_places=2)
     HRA = models.DecimalField(max_digits=10,decimal_places=2)
     PRA_gain = models.DecimalField(max_digits=10,decimal_places=2)
-    Overtime = models.DecimalField(max_digits=10,decimal_places=2)
-    W_F_P = models.DecimalField(max_digits=10,decimal_places=2)
-    Bonus = models.DecimalField(max_digits=10,decimal_places=2)
+    Overtime = models.DecimalField(max_digits=10,decimal_places=2, null=True)
+    W_F_P = models.DecimalField(max_digits=10,decimal_places=2, null=True)
+    Bonus = models.DecimalField(max_digits=10,decimal_places=2, null=True)
 
     # deductions
-    LOP = models.DecimalField(max_digits=10,decimal_places=2)
-    PRA_loss = models.DecimalField(max_digits=10,decimal_places=2)
-    ESI = models.DecimalField(max_digits=10,decimal_places=2)
-    ID_Card =models.DecimalField(max_digits=10,decimal_places=2)
+    LOP = models.DecimalField(max_digits=10,decimal_places=2, null=True)
+    PRA_loss = models.DecimalField(max_digits=10,decimal_places=2, null=True)
+    ESI = models.DecimalField(max_digits=10,decimal_places=2, null=True)
+    ID_Card =models.DecimalField(max_digits=10,decimal_places=2, null=True)
 
     #salary
-    TOTAL_gain = models.DecimalField(max_digits=10,decimal_places=2)
-    GROSS_SALARY = models.DecimalField(max_digits=10,decimal_places=2)
-    TOTAL_loss = models.DecimalField(max_digits=10,decimal_places=2)
-    NET_SALARY = models.DecimalField(max_digits=10,decimal_places=2)
+    TOTAL_gain = models.DecimalField(max_digits=10,decimal_places=2, null=True)
+    GROSS_SALARY = models.DecimalField(max_digits=10,decimal_places=2, null=True)
+    TOTAL_loss = models.DecimalField(max_digits=10,decimal_places=2, null=True)
+    NET_SALARY = models.DecimalField(max_digits=10,decimal_places=2, null=True)
 
     def __str__(self):
         return self.emp.Emp_Name
