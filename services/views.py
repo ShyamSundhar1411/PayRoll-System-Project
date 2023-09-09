@@ -23,7 +23,6 @@ def home(request):
                     break
 
             if header_row is not None:
-                # Set the found header row as column names
                 excel_data.columns = header_row
 
                 # Locate the row where the column names are and use it as the header row
