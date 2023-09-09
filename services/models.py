@@ -15,7 +15,6 @@ class Employee(models.Model):
 
 class Salary(models.Model):
     emp  = models.ForeignKey('Employee', on_delete=models.CASCADE,)
-
     # earnings
     Basic = models.DecimalField(max_digits=10,decimal_places=2)
     SA = models.DecimalField(max_digits=10,decimal_places=2)
@@ -36,6 +35,6 @@ class Salary(models.Model):
     GROSS_SALARY = models.DecimalField(max_digits=10,decimal_places=2, null=True)
     TOTAL_loss = models.DecimalField(max_digits=10,decimal_places=2, null=True)
     NET_SALARY = models.DecimalField(max_digits=10,decimal_places=2, null=True)
-
+    date_of_generation = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.emp.Emp_Name
