@@ -33,18 +33,20 @@ def home(request):
 
                 # Skip the header rows and create Employee objects from the data
                 for index, row in excel_data.iloc[header_row_index + 1 :].iterrows():
-                    employee = Employee.objects.create(
-                        Emp_Name=row["Emp_Name"],
-                        Emp_Code=row["Emp_Code"],
-                        Department=row["Department"],
-                        no_of_days=row.get(
-                            "no_of_days", 0
-                        ),  # Handle the possibility of missing columns
-                        days_worked=row.get("days_worked", 0),
-                        Ot_hrs=None if pd.isna(row["Ot_hrs"]) else int(row["Ot_hrs"]),
-                    )
-                    employee.save()
-
+                    if not Employee.objects.filter(Emp_Code=row["Emp_Code"]).exists():
+                        employee = Employee.objects.create(
+                            Emp_Name=row["Emp_Name"],
+                            Emp_Code=row["Emp_Code"],
+                            Department=row["Department"],
+                            no_of_days=row.get(
+                                "no_of_days", 0
+                            ),  # Handle the possibility of missing columns
+                            days_worked=row.get("days_worked", 0),
+                            Ot_hrs=None if pd.isna(row["Ot_hrs"]) else int(row["Ot_hrs"]),
+                        )
+                        employee.save()
+                    else:
+                        employee = Employee.objects.get(Emp_Code=row["Emp_Code"])
                     salary = Salary.objects.create(
                         emp=employee,
                         Basic=row.get("Basic", 0) if not math.isnan(row["Basic"]) else 0,
@@ -87,5 +89,5 @@ def home(request):
 
 
 def success(request):
-    salary = Salary.objects.all
+    salary = Salary.objects.filter()
     return render(request, "services/success.html", {"salary":salary})

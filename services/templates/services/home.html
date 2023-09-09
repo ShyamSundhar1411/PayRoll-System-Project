@@ -1,14 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Upload Excel File</title>
-</head>
-<body>
-    <h1>Upload Excel File</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Upload</button>
-    </form>
-</body>
-</html>
+{% extends 'base.html' %} {% block content %} {% load crispy_forms_tags %}
+<div class="container">
+  <h1 class="text-center">Upload Excel File</h1>
+  <hr/>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %} {{ form|crispy }}
+    <button type="submit" class="btn btn-outline-primary" style="border-radius:20px;"><i class="fa-solid fa-upload"></i> Upload</button>
+  </form>
+</div>
+{% endblock %}

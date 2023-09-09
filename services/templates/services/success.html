@@ -1,147 +1,117 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Details</title>
-    <style>
-        .content{
-            display: flex;
-            background-color: lightgray;
-            flex-direction: column;
-        }
-        .item{
-            display: flex;
-            flex-direction: column;
-            background-color: white;
-            border-radius: 10px;
-            width: 500px;
-            margin: 2rem;
-        }
-        .Details{
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-        }
-        .emp{
-            margin-left: 5rem;
-            margin-top: 3rem;
-        }
-        .emp1{
-            margin-left: 4rem;
-        }
-        .emp2{
-            display: flex;
-            flex-direction: row;
-            margin-right: 3rem;
-        }
-        .emp3{
-            margin-left: 1rem;
-            margin-top: 3rem;
-        }
-    </style>
-</head>
-<body>
-    
-    <!-- <table border="1">
-        <tbody>
-            {% for salary in salary %}
-            <tr>
-                <td>{{ salary.emp.Emp_Name }}</td>
-                <td>{{ salary.emp.Emp_Code }}</td>
-                <td>{{ salary.emp.Department }}</td>
-                <td>{{ salary.emp.no_of_days }}</td>
-                <td>{{ salary.emp.days_worked }}</td>
-                <td>{{ salary.emp.Ot_hrs }}</td>
-                <td>{{ salary.TOTAL_gain }}</td>
-                <td>{{ salary.GROSS_SALARY }}</td>
-                <td>{{ salary.TOTAL_loss }}</td>
-                <td>{{ salary.NET_SALARY }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table> -->
-    <div class="content">
-        {% for salary in salary %}
-        <div class="item">
-            <div class="Details">
-                <div class="emp2">
-                    <div class="emp3">
-                        <p>Employee Name</p>
-                        <p>Employee ID </p>
-                        <p>Department</p>
-                    </div>
-                    <div class="emp3">
-                        <p>{{ salary.emp.Emp_Name }}</p>
-                        <p>{{ salary.emp.Emp_Code }}</p>
-                        <p>{{ salary.emp.Department }}</p>
-                    </div>
-                </div>
-                <div class="emp2">
-                    <div class="emp3">
-                        <p>Total Days</p>
-                        <p>Days Worked</p>
-                        <p>Ot_hrs</p>
-                    </div>
-                    <div class="emp3">
-                        <p>{{ salary.emp.no_of_days }}</p>
-                        <p>{{ salary.emp.days_worked }}</p>
-                        <p>{{ salary.emp.Ot_hrs }}</p>
-                    </div>
-
-                </div>
-            </div>
-            <div class="Details">
-                <div class="emp2">
-                    <div class="emp3">
-                        <h3>Earnings</h3>
-                        <p>Basic</p>
-                        <p>SA</p>
-                        <p>HRA</p>
-                        <p>PRA_Gain</p>
-                        <p>OT_Amt</p>
-                        <p>W/F Pay</p>
-                        <p>Bonus</p>
-                        <p>Total Earnings</p>
-                    </div>
-                    <div class="emp3">
-                        <h3>Amount</h3>
-                        <p>{{ salary.Basic }}</p>
-                        <p>{{ salary.SA }}</p>
-                        <p>{{ salary.HRA }}</p>
-                        <p>{{ salary.PRA_gain }}</p>
-                        <p>{{ salary.Overtime }}</p>
-                        <p>{{ salary.W_F_P }}</p>
-                        <p>{{ salary.Bonus }}</p>
-                        <p>{{ salary.TOTAL_gain }}</p>
-                    </div>
-
-                </div>
-                <div class="emp2">
-                    <div class="emp3">
-                        <h3>Deductions</h3>
-                        <p>LOP</p>
-                        <p>ESI</p>
-                        <p>PRA_Loss</p>
-                        <p>ID Card</p>
-                        <p>Total Deductions</p>
-                    </div>
-                    <div class="emp3">
-                        <h3>Amount</h3>
-                        <p>{{ salary.LOP }}</p>
-                        <p>{{ salary.ESI }}</p>
-                        <p>{{ salary.PRA_loss }}</p>
-                        <p>{{ salary.ID_Card }}</p>
-                        <p>{{ salary.TOTAL_loss }}</p>
-                    </div>
-
-                </div>
-            </div>
-            <div class="emp3">
-                <h2>Net Payable &nbsp;&nbsp; {{ salary.NET_SALARY }}</h2>
-            </div>
+{% extends 'base.html' %} {% block content %}
+<style>
+  .content {
+    display: flex;
+    flex-direction: column;
+  }
+  .item {
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    width: auto;
+    margin: 2rem;
+  }
+  .Details {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .emp {
+    margin-left: 5rem;
+    margin-top: 3rem;
+  }
+  .emp1 {
+    margin-left: 4rem;
+  }
+  .emp2 {
+    display: flex;
+    flex-direction: row;
+    margin-right: 3rem;
+  }
+  .emp3 {
+    margin-left: 1rem;
+    margin-top: 3rem;
+  }
+</style>
+<div class="container justify-content-center">
+  <div class="content">
+    {% for salary in salary %}
+    <div class="item border border-dark">
+      <div class="Details">
+        <div class="emp2 align-items-center">
+          <div class="emp3 ">
+            <p>Employee Name</p>
+            <p>Employee ID</p>
+            <p>Department</p>
+          </div>
+          <div class="emp3">
+            <p>{{ salary.emp.Emp_Name }}</p>
+            <p>{{ salary.emp.Emp_Code }}</p>
+            <p>{{ salary.emp.Department }}</p>
+          </div>
         </div>
-        {% endfor %}
+        <div class="emp2">
+          <div class="emp3">
+            <p>Total Days</p>
+            <p>Days Worked</p>
+            <p>Ot_hrs</p>
+          </div>
+          <div class="emp3">
+            <p>{{ salary.emp.no_of_days }}</p>
+            <p>{{ salary.emp.days_worked }}</p>
+            <p>{{ salary.emp.Ot_hrs }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="Details">
+        <div class="emp2">
+          <div class="emp3">
+            <h3>Earnings</h3>
+            <p>Basic</p>
+            <p>SA</p>
+            <p>HRA</p>
+            <p>PRA_Gain</p>
+            <p>OT_Amt</p>
+            <p>W/F Pay</p>
+            <p>Bonus</p>
+            <p>Total Earnings</p>
+          </div>
+          <div class="emp3">
+            <h3>Amount</h3>
+            <p>₹{{ salary.Basic }}</p>
+            <p>₹{{ salary.SA }}</p>
+            <p>₹{{ salary.HRA }}</p>
+            <p>₹{{ salary.PRA_gain }}</p>
+            <p>₹{{ salary.Overtime }}</p>
+            <p>₹{{ salary.W_F_P }}</p>
+            <p>₹{{ salary.Bonus }}</p>
+            <p>₹{{ salary.TOTAL_gain }}</p>
+          </div>
+        </div>
+        <div class="emp2">
+          <div class="emp3">
+            <h3>Deductions</h3>
+            <p>LOP</p>
+            <p>ESI</p>
+            <p>PRA_Loss</p>
+            <p>ID Card</p>
+            <p>Total Deductions</p>
+          </div>
+          <div class="emp3">
+            <h3>Amount</h3>
+            <p>₹{{ salary.LOP }}</p>
+            <p>₹{{ salary.ESI }}</p>
+            <p>₹{{ salary.PRA_loss }}</p>
+            <p>₹{{ salary.ID_Card }}</p>
+            <p>₹{{ salary.TOTAL_loss }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="emp3" style="margin-bottom:20px;">
+        <h2>Net Payable ₹{{ salary.NET_SALARY }}</h2>
+      </div>
     </div>
-</body>
-</html>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
