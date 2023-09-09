@@ -87,4 +87,5 @@ def home(request):
 
 
 def success(request):
-    return render(request, "services/success.html")
+    salary = Salary.objects.all
+    return render(request, "services/success.html", {"salary":salary})
