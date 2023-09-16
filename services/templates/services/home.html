@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% block content %} {% load crispy_forms_tags %}
+{% comment %} {% extends 'base.html' %} {% block content %} {% load crispy_forms_tags %}
 <div class="container">
   <h1 class="text-center">Upload Excel File</h1>
   <hr/>
@@ -7,4 +7,19 @@
     <button type="submit" class="btn btn-outline-primary" style="border-radius:20px;"><i class="fa-solid fa-upload"></i> Upload</button>
   </form>
 </div>
-{% endblock %}
+{% endblock %} {% endcomment %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Attendance Data</title>
+</head>
+<body>
+    <h1>Upload Attendance Data</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ excel_form.as_p }}
+        <button type="submit">Upload</button>
+    </form>
+</body>
+</html>
