@@ -101,9 +101,10 @@ def upload_file(request):
     return render(request, "services/home.html", {"excel_form": excel_form})
 
 
-def success(request):
+ def success(request):
     return render(request, "services/success.html")
 
-def payslip(request):
+ def payslip(request):
     payslip = MonthFilter(request.GET, queryset=Payslip.objects.all())
     return render(request, "services/pyslip.html", {"filter": payslip})
+
