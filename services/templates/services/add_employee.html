@@ -1,4 +1,4 @@
-{% extends 'base.html' %}  {% block content %} {% load crispy_forms_tags %}
+{% extends 'base.html' %} {% block content %} {% load crispy_forms_tags %}
 <style>
   .custom-input {
     width: 80%;
@@ -29,7 +29,10 @@
         <div class="col-md-6">{{ form.hra|as_crispy_field }}</div>
         <div class="col-md-6">{{ form.pra_gain|as_crispy_field }}</div>
       </div>
-      <div class="row"><div class="col-md-6">{{ form.att_bonus|as_crispy_field }}</div></div>
+      <div class="row">
+        <div class="col-md-6">{{ form.att_bonus|as_crispy_field }}</div>
+        <div class="col-md-6">{{ form.department|as_crispy_field }}</div>
+      </div>
     </div>
 
     <!-- Third section: Deductions -->
