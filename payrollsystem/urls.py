@@ -17,14 +17,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf import settings
-from django.conf.urls.static import static 
+from django.conf.urls.static import static
 from services import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('', views.home, name='home'),
-    path('success', views.success, name='success')
+    path("addemployee", views.input_employee_rates, name="addemployee"),
+    path("uploadexcel", views.upload_file, name="uploadexcel"),
+    path("success", views.success, name="success")
+    # path('add_employee', views.add_employee, name='add_employee')
 ]
 
-urlpatterns+=static(settings.STATIC_URL,document_root = settings.STATIC_ROOT)
-urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
