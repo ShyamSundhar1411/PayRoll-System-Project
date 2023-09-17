@@ -2,7 +2,7 @@ import django_filters
 from datetime import datetime
 from django.db.models import Value
 from django.db.models.functions import ExtractMonth
-from .models import Salary
+from .models import Payslip
 
 class MonthFilter(django_filters.FilterSet):
     MONTH_CHOICES = [
@@ -21,7 +21,7 @@ class MonthFilter(django_filters.FilterSet):
     )
 
     class Meta:
-        model = Salary
+        model = Payslip
         fields = ['month']
 
     def filter_by_month(self, queryset, name, value):

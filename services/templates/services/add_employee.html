@@ -1,14 +1,47 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Input Employee Rates</title>
-</head>
-<body>
-    <h1>Input Employee Rates</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Submit</button>
-    </form>
-</body>
-</html>
+{% extends 'base.html' %} {% block content %} {% load crispy_forms_tags %}
+<style>
+  .custom-input {
+    width: 80%;
+    border-color: rgb(180, 177, 177);
+  }
+</style>
+<div class="container">
+  <form method="post">
+    {% csrf_token %}
+    <!-- First section: Employee Details -->
+    <div class="section">
+      <h3>Employee Details</h3>
+      <div class="row">
+        <div class="col-md-6">{{ form.emp_code|as_crispy_field }}</div>
+        <div class="col-md-6">{{ form.emp_name|as_crispy_field }}</div>
+      </div>
+    </div>
+    <!-- Second section: Earnings -->
+    <div class="section">
+      <h3>Earnings</h3>
+      <div class="row">
+        <div class="col-md-6">{{ form.basic_pay|as_crispy_field }}</div>
+        <div class="col-md-6">{{ form.sa|as_crispy_field }}</div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">{{ form.hra|as_crispy_field }}</div>
+        <div class="col-md-6">{{ form.pra_gain|as_crispy_field }}</div>
+      </div>
+    </div>
+    <!-- Third section: Deductions -->
+    <div class="section">
+      <h3>Deductions</h3>
+      <div class="row">
+        <div class="col-md-6">{{ form.pra_loss|as_crispy_field }}</div>
+        <div class="col-md-6">{{ form.esi|as_crispy_field }}</div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">{{ form.lop|as_crispy_field }}</div>
+        <div class="col-md-6">{{ form.id_card|as_crispy_field }}</div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+  </form>
+</div>
+{% endblock %}
