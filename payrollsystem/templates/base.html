@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    {% load static %}
+  {% load static %}
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
@@ -14,22 +14,66 @@
       crossorigin="anonymous"
     />
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <link href="{% static 'bootstrap.min.css' %}" rel="stylesheet" />
     <title>PayRoll System</title>
   </head>
   <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary" style="margin-bottom:30px;">
-          <div class="container">
-            <a class="navbar-brand" href="{% url 'home' %}">
-              {% comment %} <img src ='{% static "icon.png" %}' class='d-inline-block align-top-right' height=50 width=50/> {% endcomment %}
-              PayRoll System
-            </a>
+      <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+        <div class="container " >
+          <div>
+            <img src="{% static 'MES.png' %}" alt="no imgae" style="height: 70px;width: auto;"/>
+            <a class="navbar-brand fs-4" href="#">Navbar</a>
           </div>
+          <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav ms-auto fs-5">
+              <li class="nav-item ">
+                <a class="nav-link active" href="#"
+                  >Home
+                  <span class="visually-hidden">(current)</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Employees</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Upload</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">About</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a
+                  class="nav-link dropdown-toggle"
+                  data-bs-toggle="dropdown"
+                  href="#"
+                  role="button"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  >Dropdown</a
+                >
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="#">Action</a>
+                  <a class="dropdown-item" href="#">Another action</a>
+                  <a class="dropdown-item" href="#">Something else here</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="#">Separated link</a>
+                </div>
+              </li>
+            </ul>
+          </div>
+
         </nav>
       </header>
     <div class="container">{% block content %}{% include 'messages.html' %}{% endblock %}</div>
+
 
 
     <script
