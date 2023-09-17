@@ -4,6 +4,7 @@ from .forms import EmployeeForm, ExcelUploadForm
 from .filters import MonthFilter
 import pandas as pd
 import math
+from django.db.models import F
 
 
 def input_employee_rates(request):
@@ -20,6 +21,22 @@ def input_employee_rates(request):
         form = EmployeeForm()
 
     return render(request, "services/add_employee.html", {"form": form})
+
+def emlist(request):
+    sort_column = request.GET.get('sort', 'emp_code')
+    if sort_column in ['emp_code', 'basic']:
+        data = Employee.objects.all()
+        data = sorted(data, key=lambda x: int(getattr(x, sort_column)))
+    else:
+        data = Employee.objects.all().order_by(sort_column)
+
+
+    
+    context = {
+        'data': data
+    }
+    
+    return render(request, "services/emlist.html", { 'data': data})
 
 
 def upload_file(request):
@@ -101,10 +118,10 @@ def upload_file(request):
     return render(request, "services/home.html", {"excel_form": excel_form})
 
 
- def success(request):
+def success(request):
     return render(request, "services/success.html")
 
- def payslip(request):
+def payslip(request):
     payslip = MonthFilter(request.GET, queryset=Payslip.objects.all())
     return render(request, "services/pyslip.html", {"filter": payslip})
 
