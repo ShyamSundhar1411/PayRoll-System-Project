@@ -1,4 +1,4 @@
-{% extends 'base.html' %} {% block content %} {% load crispy_forms_tags %}
+{% extends 'base.html' %}  {% block content %} {% load crispy_forms_tags %}
 <style>
   .custom-input {
     width: 80%;
@@ -8,6 +8,7 @@
 <div class="container">
   <form method="post">
     {% csrf_token %}
+
     <!-- First section: Employee Details -->
     <div class="section">
       <h3>Employee Details</h3>
@@ -16,6 +17,7 @@
         <div class="col-md-6">{{ form.emp_name|as_crispy_field }}</div>
       </div>
     </div>
+
     <!-- Second section: Earnings -->
     <div class="section">
       <h3>Earnings</h3>
@@ -27,7 +29,9 @@
         <div class="col-md-6">{{ form.hra|as_crispy_field }}</div>
         <div class="col-md-6">{{ form.pra_gain|as_crispy_field }}</div>
       </div>
+      <div class="row"><div class="col-md-6">{{ form.att_bonus|as_crispy_field }}</div></div>
     </div>
+
     <!-- Third section: Deductions -->
     <div class="section">
       <h3>Deductions</h3>

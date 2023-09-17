@@ -1,15 +1,17 @@
-import pandas as pd
 from django.shortcuts import render, redirect
 from .models import Employee, Payslip
 from .forms import EmployeeForm, ExcelUploadForm
 from .filters import MonthFilter
+import pandas as pd
 import math
 
 
 def input_employee_rates(request):
     if request.method == "POST":
+        print("Post is done")
         form = EmployeeForm(request.POST)
         if form.is_valid():
+            print("form is valid")
             form.save()
             return redirect("success")
 
