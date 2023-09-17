@@ -24,7 +24,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("addemployee", views.input_employee_rates, name="addemployee"),
     path("uploadexcel", views.upload_file, name="uploadexcel"),
-    path("success", views.success, name="success")
+    path("success", views.success, name="success"),
+    path("payslip", views.payslip, name="payslip")
     # path('add_employee', views.add_employee, name='add_employee')
 ]
 

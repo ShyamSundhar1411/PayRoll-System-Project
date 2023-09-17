@@ -2,6 +2,7 @@ import pandas as pd
 from django.shortcuts import render, redirect
 from .models import Employee, Payslip
 from .forms import EmployeeForm, ExcelUploadForm
+from .filters import MonthFilter
 import math
 
 
@@ -13,6 +14,7 @@ def input_employee_rates(request):
             return redirect("success")
 
     else:
+        print("Error")
         form = EmployeeForm()
 
     return render(request, "services/add_employee.html", {"form": form})
@@ -35,25 +37,27 @@ def upload_file(request):
                 total = row["Total"]
                 if not pd.isna(emp_code):
                     current_emp_code = emp_code
-                    employee_status[current_emp_code] = []
+                    employee_status[current_emp_code] = [] 
                     employee_total[current_emp_code] = []
                 if not pd.isna(status):
                     employee_status[current_emp_code].append(status)
                     employee_total[current_emp_code].append(total)
 
-            for i, j in employee_status.items():
+            present={}
+            total_days={}
+            for i, j in employee_status.items(): 
                 days_worked = 0
-                total_days = len(j)
+                total_days[i] = len(j)
                 for k in j:
                     if k == "P":
                         days_worked += 1
+                present[i]=days_worked
 
             for i, j in employee_total.items():
                 ot = 0
                 for k in j:
                     hours_worked = k.hour + k.minute / 60
                     diff = hours_worked - 9
-                    print(diff)
                     ot += max(math.floor(diff), 0)
                 employee = Employee.objects.get(emp_code=i)
                 basicpay_perday = employee.basic_pay / 30
@@ -72,16 +76,19 @@ def upload_file(request):
 
                 net_salary = gross_salary - total_deductions
 
+                month = ExcelUploadForm(request.POST)
+
                 payslip = Payslip.objects.create(
                     employee=employee,
-                    total_days_worked=days_worked,
-                    absent_days=(total_days - days_worked),
+                    total_days_worked=present[i],
+                    absent_days=(total_days[i] - present[i]),
                     overtime_hrs=ot,
                     overtime_rate=ot_amount,
                     total_earnings=total_earnings,
                     gross_salary=gross_salary,
                     total_deductions=total_deductions,
                     net_salary=net_salary,
+                    month=month
                 )
                 payslip.save()
 
@@ -94,3 +101,7 @@ def upload_file(request):
 
 def success(request):
     return render(request, "services/success.html")
+
+def payslip(request):
+    payslip = MonthFilter(request.GET, queryset=Payslip.objects.all())
+    return render(request, "services/pyslip.html", {"filter": payslip})
