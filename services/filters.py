@@ -20,16 +20,21 @@ class MonthFilter(django_filters.FilterSet):
         method='filter_by_month',
     )
 
+        # Add a filter field for the year
+    year = django_filters.NumberFilter(
+        field_name='year',
+        label='Select Year',
+        lookup_expr='exact',
+    )
+
     class Meta:
         model = Payslip
-        fields = ['month']
+        fields = ['month','year']
 
     def filter_by_month(self, queryset, name, value):
         if value:
             # Filter by the selected month
-            return queryset.annotate(
-                salary_month=ExtractMonth('month')
-            ).filter(salary_month=int(value))
+            return queryset.filter(month=int(value))
         else:
             # Return the queryset unfiltered if no month is selected
             return queryset

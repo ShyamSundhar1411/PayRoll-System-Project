@@ -1,3 +1,4 @@
+
 from django import forms
 from .models import Employee
 
@@ -18,8 +19,15 @@ class ExcelUploadForm(forms.Form):
         help_text="Upload the Excel file containing employee data.",
     )
 
-    month = forms.CharField(
-        label="Month",
-        max_length=255,  # Adjust the max length as needed
-        help_text="Enter the month for the data (e.g., January 2023).",
+    MONTH_CHOICES = [
+        ('', 'Select Month'),
+        (1, 'January'), (2, 'February'), (3, 'March'), (4, 'April'),
+        (5, 'May'), (6, 'June'), (7, 'July'), (8, 'August'),
+        (9, 'September'), (10, 'October'), (11, 'November'), (12, 'December'),
+    ]
+
+    selected_month = forms.ChoiceField(
+        label='Select Month',
+        choices=MONTH_CHOICES,
+        required=False,  # Allow an empty selection
     )

@@ -1,75 +1,118 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %} {% block content %} {% load crispy_forms_tags %}
+<style>
+  div{
+    font-family: 'Montserrat', sans-serif;
+  }
+</style>
+<form method="get">
+  <!-- {{ filter.form.as_p }} -->
+  <div class="row">
+    <div class="col-md-6">{{ filter.form.month|as_crispy_field }}</div>
+    <div class="col-md-6">{{ filter.form.year|as_crispy_field }}</div>
+  </div>
+  <button type="submit" class="btn btn-primary mt-1">Filter</button>
+</form>
 
-<table class="table table-hover" >
-    <thead>
-      <tr class="table-light">
-        <th scope="col">Type</th>
-        <th scope="col">Column heading</th>
-        <th scope="col">Column heading</th>
-        <th scope="col">Column heading</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="table-light">
-        <th scope="row">Active</th>
-        <td>Column content</td>
-        <td>Column content</td>
-        <td>Column content</td>
-      </tr>
-      <tr class="table-light">
-        <th scope="row">Default</th>
-        <td>Column content</td>
-        <td>Column content</td>
-        <td>Column content</td>
-      </tr>
-      <tr class="table-light">
-        <th scope="row">Primary</th>
-        <td>Column content</td>
-        <td>Column content</td>
-        <td>Column content</td>
-      </tr>
-      <tr class="table-light">
-        <th scope="row">Secondary</th>
-        <td>Column content</td>
-        <td>Column content</td>
-        <td>Column content</td>
-      </tr>
-      <tr class="table-light">
-        <th scope="row">Success</th>
-        <td>Column content</td>
-        <td>Column content</td>
-        <td>Column content</td>
-      </tr>
-      <tr class="table-light">
-        <th scope="row">Danger</th>
-        <td>Column content</td>
-        <td>Column content</td>
-        <td>Column content</td>
-      </tr>
-      <tr class="table-light">
-        <th scope="row">Warning</th>
-        <td>Column content</td>
-        <td>Column content</td>
-        <td>Column content</td>
-      </tr>
-      <tr class="table-light">
-        <th scope="row">Info</th>
-        <td>Column content</td>
-        <td>Column content</td>
-        <td>Column content</td>
-      </tr>
-      <tr class="table-light">
-        <th scope="row">Light</th>
-        <td>Column content</td>
-        <td>Column content</td>
-        <td>Column content</td>
-      </tr>
-      <tr class="table-light">
-        <th scope="row">Dark</th>
-        <td>Column content</td>
-        <td>Column content</td>
-        <td>Column content</td>
-      </tr>
-    </tbody>
-  </table>
-  {% endblock %}
+<div class="row">
+  {% for pay in filter.qs %}
+  <div class="col-12 col-md-6">
+    <div class="border border-dark rounded-4 mt-4">
+      
+      <div class="section ms-4 mt-3">
+        <h3>Employee Details</h3>
+        <div class="row">
+          <div class="col-6 col-md-3">Emplyee name</div>
+          <div class="col-6 col-md-3">{{ pay.employee.emp_name }}</div>
+          <div class="col-6 col-md-3">Days Worked</div>
+          <div class="col-6 col-md-3">{{ pay.total_days_worked }}</div>
+        </div>
+        <div class="row">
+          <div class="col-6 col-md-3">Emplyee code</div>
+          <div class="col-6 col-md-3">{{ pay.employee.emp_code }}</div>
+          <div class="col-6 col-md-3">Overtime hours</div>
+          <div class="col-6 col-md-3">{{ pay.overtime_hrs }}</div>
+        </div>
+        <div class="row">
+          <div class="col-6 col-md-3">Department</div>
+          <div class="col-6 col-md-3">{{ pay.employee.department }}</div>
+          <div class="col-6 col-md-3">LOP</div>
+          <div class="col-6 col-md-3">{{ pay.absent_days }}</div>
+        </div>
+        <div class="row">
+          <div class="col-6 col-md-3">DOB</div>
+          <div class="col-6 col-md-3">{{ pay.employee.emp_code }}</div>
+        </div>
+      </div>
+
+      <div class="section ms-4 mt-3">
+        <div class="row">
+          <div class="col-md-6">
+            <h3>Earnings</h3>
+            <div class="row">
+              <div class="col-6 col-md-6">Basic</div>
+              <div class="col-6 col-md-6">{{ pay.employee.basic_pay }}</div>
+            </div>
+            <div class="row">
+              <div class="col-6 col-md-6">SA</div>
+              <div class="col-6 col-md-6">{{ pay.employee.sa }}</div>
+            </div>
+            <div class="row">
+              <div class="col-6 col-md-6">HRA</div>
+              <div class="col-6 col-md-6">{{ pay.employee.hra }}</div>
+            </div>
+            <div class="row">
+              <div class="col-6 col-md-6">PRA</div>
+              <div class="col-6 col-md-6">{{ pay.employee.pra_gain }}</div>
+            </div>
+            <div class="row">
+              <div class="col-6 col-md-6">Attd. Bonus</div>
+              <div class="col-6 col-md-6">{{ pay.employee.att_bonus }}</div>
+            </div>
+            <div class="row">
+              <div class="col-6 col-md-6">Overtime rate</div>
+              <div class="col-6 col-md-6">{{ pay.overtime_rate }}</div>
+            </div>
+            <div class="row">
+              <div class="col-6 col-md-6 text-success">Gross Earnings</div>
+              <div class="col-6 col-md-6 text-success">{{ pay.gross_salary }}</div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <h3>Deductions</h3>
+            <div class="row">
+              <div class="col-6 col-md-6">PRA</div>
+              <div class="col-6 col-md-6">{{ pay.employee.pra_loss }}</div>
+            </div>
+            <div class="row">
+              <div class="col-6 col-md-6">ESI</div>
+              <div class="col-6 col-md-6">{{ pay.employee.esi }}</div>
+            </div>
+            <div class="row">
+              <div class="col-6 col-md-6">LOP</div>
+              <div class="col-6 col-md-6">{{ pay.employee.lop }}</div>
+            </div>
+            <div class="row">
+              <div class="col-6 col-md-6">ID Card</div>
+              <div class="col-6 col-md-6">{{ pay.employee.id_card }}</div>
+            </div>
+            <div class="row">
+              <div class="col-6 col-md-6 text-danger">Total Deductions</div>
+              <div class="col-6 col-md-6 text-danger">{{ pay.total_deductions }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section mt-3">
+        <div class="row">
+          <h3 class="col-6 col-md-6 text-center">Net Payable</h3>
+          <h3 class="col-6 col-md-6">{{ pay.net_salary }}</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% if forloop.counter|divisibleby:2 %}
+</div>
+<div class="row">{% endif %} {% endfor %}</div>
+{% endblock %}

@@ -41,9 +41,9 @@ def emlist(request):
 
 def upload_file(request):
     if request.method == "POST":
-        excel_form = ExcelUploadForm(request.POST, request.FILES)
+        form = ExcelUploadForm(request.POST, request.FILES)
 
-        if excel_form.is_valid():
+        if form.is_valid():
             excel_file = request.FILES["excel_file"]
             df = pd.read_excel(excel_file)
 
@@ -95,7 +95,7 @@ def upload_file(request):
 
                 net_salary = gross_salary - total_deductions
 
-                month = ExcelUploadForm(request.POST)
+                selected_month = form.cleaned_data.get('selected_month')
 
                 payslip = Payslip.objects.create(
                     employee=employee,
@@ -107,21 +107,18 @@ def upload_file(request):
                     gross_salary=gross_salary,
                     total_deductions=total_deductions,
                     net_salary=net_salary,
-                    month=month
+                    month=selected_month
                 )
                 payslip.save()
 
             return redirect("success")
     else:
-        excel_form = ExcelUploadForm()
+        form = ExcelUploadForm()
 
-    return render(request, "services/home.html", {"excel_form": excel_form})
+    return render(request, "services/home.html", {"form": form})
 
 
 def success(request):
-    return render(request, "services/success.html")
-
-def payslip(request):
-    payslip = MonthFilter(request.GET, queryset=Payslip.objects.all())
-    return render(request, "services/pyslip.html", {"filter": payslip})
+    payslip = MonthFilter(data=request.GET, queryset=Payslip.objects.all())
+    return render(request, "services/success.html", {"filter": payslip})
 
