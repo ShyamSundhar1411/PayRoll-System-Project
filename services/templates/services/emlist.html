@@ -10,9 +10,13 @@
             display: inline-block;
             margin-left: 5px; /* Adjust the spacing as needed */
         }
+    div{
+    font-family: 'Montserrat', sans-serif;
+  }
 </style>
 
-<table class="table table-hover custom-table" border="1">
+<!-- <h2>Employee list</h2>
+<table class="table table-hover custom-table border " >
     <thead>
       <tr>
         <th scope="col">EmpCode<a href="?sort=emp_code"><span class="sort-indicator"></span></a></th>
@@ -47,6 +51,60 @@
         </tr>
     {% endfor %}
     </tbody>
-  </table>
+  </table> -->
 
-  {% endblock %}
+<div class="row ">
+  <div class="col-md-8">
+    <h2>Employees</h2>
+  </div>
+  <div class="col-md-4">
+    filter
+  </div>
+</div>
+
+
+<div class="row mt-4 ps-5 pe-5 pb-3">
+  <div class="col-md-2">
+    Name
+  </div>
+  <div class="col-md-2">
+    Emp code
+  </div>
+  <div class="col-md-2">
+    Department
+  </div>
+  <div class="col-md-2">
+    Basic pay
+  </div>
+  <div class="col-md-2">
+    SA
+  </div>
+  <div class="col-md-2">
+    HRA
+  </div>
+</div>
+
+{% for item in data %}
+<div class="row border border-secondary rounded p-5 mb-3 bg-light">
+  <div class="col-md-2">
+    {{item.emp_name}}
+  </div>
+  <div class="col-md-2">
+    {{item.emp_code}}
+  </div>
+  <div class="col-md-2">
+    {{item.department}}
+  </div>
+  <div class="col-md-2">
+    {{item.basic_pay}}
+  </div>
+  <div class="col-md-2">
+    {{item.sa}}
+  </div>
+  <div class="col-md-2">
+    {{item.hra}}
+  </div>
+</div>
+{% endfor %}
+
+{% endblock %}
