@@ -1,3 +1,13 @@
 {% extends 'base.html' %} {% block content %}
-
+<form method="get">
+    {{ month_filter.form.as_p }}
+    <button type="submit">Filter</button>
+  </form>
+  <div class="container">
+    {% for pay in filter.qs %}
+    <div class="col-md-6 rounded border-primary">
+      
+    </div>
+  
+  </div>
 {% endblock %}
