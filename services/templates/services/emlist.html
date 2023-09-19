@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<style>
+    .sort-indicator::before {
+            content: '\25BC'; /* Unicode character for arrow-up */
+            display: inline-block;
+            margin-left: 5px; /* Adjust the spacing as needed */
+        }
+</style>
+
+<table class="table table-hover custom-table" border="1">
+    <thead>
+      <tr>
+        <th scope="col">EmpCode<a href="?sort=emp_code"><span class="sort-indicator"></span></a></th>
+        <th scope="col">EmpName<a href="?sort=emp_name"><span class="sort-indicator"></span></a></th>
+        <th scope="col">Department<a href="?sort=department"><span class="sort-indicator"></span></a></th>
+        <th scope="col">Basic<a href="?sort=basic_pay"><span class="sort-indicator"></span></a></th>
+        <th scope="col">SA<a href="?sort=sa"><span class="sort-indicator"></span></a></th>
+        <th scope="col">HRA<a href="?sort=hra"><span class="sort-indicator"></span></a></th>
+        <th scope="col">PRA Gain<a href="?sort=pra_gain"><span class="sort-indicator"></span></a></th>
+        <th scope="col">Attendance Bonus<a href="?sort=att_bonus"><span class="sort-indicator"></span></a></th>
+        <th scope="col">PRA Loss<a href="?sort=pra_loss"><span class="sort-indicator"></span></a></th>
+        <th scope="col">ESI<a href="?sort=esi"><span class="sort-indicator"></span></a></th>
+        <th scope="col">LOP<a href="?sort=lop"><span class="sort-indicator"></span></a></th>
+        <th scope="col">id_card<a href="?sort=id_card"><span class="sort-indicator"></span></a></th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for item in data %}
+        <tr class="table-light">
+            <td>{{ item.emp_code }}</td>
+            <td>{{ item.emp_name }}</td>
+            <td>{{ item.department }}</td>
+            <td>{{ item.basic_pay }}</td>
+            <td>{{ item.sa }}</td>
+            <td>{{ item.hra }}</td>
+            <td>{{ item.pra_gain }}</td>
+            <td>{{ item.att_bonus }}</td>
+            <td>{{ item.pra_loss }}</td>
+            <td>{{ item.esi }}</td>
+            <td>{{ item.lop }}</td>
+            <td>{{ item.id_card }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  {% endblock %}

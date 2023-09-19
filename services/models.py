@@ -1,9 +1,11 @@
+from datetime import date
 from django.db import models
 
 
 class Employee(models.Model):
     emp_code = models.DecimalField(primary_key=True, max_digits=10, decimal_places=2)
     emp_name = models.CharField(max_length=255)
+    department = models.CharField(max_length=255)
     basic_pay = models.DecimalField(max_digits=10, decimal_places=2)
     sa = models.DecimalField(max_digits=10, decimal_places=2)
     hra = models.DecimalField(max_digits=10, decimal_places=2)
@@ -22,7 +24,8 @@ class Payslip(models.Model):
     employee = models.ForeignKey(
         Employee, to_field="emp_code", on_delete=models.CASCADE
     )
-    month=models.CharField(max_length=255)
+    month = models.IntegerField()
+    year = models.IntegerField(default=date.today().year)
     total_days_worked = models.IntegerField()
     absent_days = models.IntegerField()
     overtime_hrs = models.DecimalField(max_digits=10, decimal_places=2)

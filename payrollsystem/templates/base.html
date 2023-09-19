@@ -22,6 +22,10 @@
       referrerpolicy="no-referrer"
     />
     <link href="{% static 'bootstrap.min.css' %}" rel="stylesheet" />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inder&family=Montserrat:wght@300;400&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
     <title>PayRoll System</title>
   </head>
   <body>
@@ -30,49 +34,30 @@
         <div class="container " >
           <div>
             <img src="{% static 'MES.png' %}" alt="no imgae" style="height: 70px;width: auto;"/>
-            <a class="navbar-brand fs-4" href="#">Navbar</a>
+            <a class="navbar-brand fs-4" href="#">Engineering Services</a>
           </div>
           <div class="collapse navbar-collapse" id="navbarColor01">
             <ul class="navbar-nav ms-auto fs-5">
               <li class="nav-item ">
-                <a class="nav-link active" href="#"
-                  >Home
+                <a class="nav-link active" href="#">Home
                   <span class="visually-hidden">(current)</span>
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Employees</a>
+                <a class="nav-link" href="{% url 'emlist' %}">Employees</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Upload</a>
+                <a class="nav-link" href="{% url 'uploadexcel' %}">Upload</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">About</a>
-              </li>
-              <li class="nav-item dropdown">
-                <a
-                  class="nav-link dropdown-toggle"
-                  data-bs-toggle="dropdown"
-                  href="#"
-                  role="button"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                  >Dropdown</a
-                >
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="#">Action</a>
-                  <a class="dropdown-item" href="#">Another action</a>
-                  <a class="dropdown-item" href="#">Something else here</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" href="#">Separated link</a>
-                </div>
+                <a class="nav-link" href="{% url 'addemployee' %}">Add Employee</a>
               </li>
             </ul>
           </div>
 
         </nav>
       </header>
-    <div class="container">{% block content %}{% include 'messages.html' %}{% endblock %}</div>
+    <div class="container mt-3">{% block content %}{% include 'messages.html' %}{% endblock %}</div>
 
 
 
