@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Employee, Payslip
 from .forms import EmployeeForm, ExcelUploadForm
-from .filters import MonthFilter
+from .filters import MonthFilter,EmployeeFilter
 import pandas as pd
 import math
 from django.db.models import F
@@ -24,19 +24,20 @@ def input_employee_rates(request):
 
 def emlist(request):
     sort_column = request.GET.get('sort', 'emp_code')
+    employee_filter = EmployeeFilter(request.GET, queryset=Employee.objects.all())
+
     if sort_column in ['emp_code', 'basic']:
         data = Employee.objects.all()
         data = sorted(data, key=lambda x: int(getattr(x, sort_column)))
     else:
-        data = Employee.objects.all().order_by(sort_column)
-
-
+        data = employee_filter.qs.order_by(sort_column)
     
     context = {
-        'data': data
+        'data': data,
+        'employee_filter': employee_filter,
     }
     
-    return render(request, "services/emlist.html", { 'data': data})
+    return render(request, "services/emlist.html", context)
 
 
 def upload_file(request):
