@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from .models import Employee, Payslip
 from .forms import EmployeeForm, ExcelUploadForm
 from .filters import MonthFilter,EmployeeFilter
@@ -122,4 +122,10 @@ def upload_file(request):
 def success(request):
     payslip = MonthFilter(data=request.GET, queryset=Payslip.objects.all())
     return render(request, "services/success.html", {"filter": payslip})
+
+def profile(request, user_id):
+    employee = get_object_or_404(Employee, emp_code=user_id)
+    payslips = Payslip.objects.filter(employee=employee)
+    context = {'employee': employee, 'payslips': payslips}
+    return render(request, 'services/profile.html', context)
 

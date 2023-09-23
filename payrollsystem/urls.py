@@ -26,6 +26,7 @@ urlpatterns = [
     path("uploadexcel", views.upload_file, name="uploadexcel"),
     path("success", views.success, name="success"),
     path("emlist", views.emlist, name='emlist'),
+    path("profile/<int:user_id>/", views.profile, name='profile'),
     # path('add_employee', views.add_employee, name='add_employee')
 ]
 

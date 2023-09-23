@@ -10,13 +10,19 @@
     font-family: "Montserrat", sans-serif;
   }
 </style>
-<div class="row mt-3">
+
+<div class="row mt-5">
   <div class="col-md-6">
     <h2>Employees</h2>
   </div>
   <div class="col-md-6">
     <form method="get" class="d-flex">
-      <input class="form-control me-sm-2" type="search" placeholder="Search" name="{{ employee_filter.form.search.name }}">
+      <input
+        class="form-control me-sm-2"
+        type="search"
+        placeholder="Search"
+        name="{{ employee_filter.form.search.name }}"
+      />
       <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
     </form>
   </div>
@@ -50,7 +56,7 @@
 
 {% for item in employee_filter.qs %}
 <div class="row border border-secondary rounded p-5 mb-3 bg-light">
-  <div class="col-md-2">{{item.emp_name}}</div>
+  <div class="col-md-2"><a href="{% url 'profile' item.emp_code %}">{{ item.emp_name }}</a></div>
   <div class="col-md-2">{{item.emp_code}}</div>
   <div class="col-md-2">{{item.department}}</div>
   <div class="col-md-2">{{item.basic_pay}}</div>
@@ -58,11 +64,13 @@
   <div class="col-md-2">{{item.hra}}</div>
 </div>
 {% endfor %}
-<div class="add-employee-button">
-  <a href="{% url 'addemployee' %}" style="color: white; text-decoration: none"
-    ><span class="plus-symbol">+</span></a
-  >
-</div>
+
+<a href="{% url 'addemployee' %}">
+  <button type="button" class="btn btn-primary btn-block mt-3 rounded">
+    <i class="fa-solid fa-plus" ></i> Add Employee
+  </button>
+</a>
+
 {% endblock %}
 
 <!-- <style>
