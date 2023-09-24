@@ -28,34 +28,40 @@
     <link href="https://fonts.googleapis.com/css2?family=Inder&family=Montserrat:wght@300;400&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
     <title>PayRoll System</title>
   </head>
+
+  
   <body>
+    
     <header>
       <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
-        <div class="container " >
+        <div class="container">
           <div>
-            <img src="{% static 'MES.png' %}" alt="no imgae" style="height: 70px;width: auto;"/>
+            <img src="{% static 'MES.png' %}" alt="no image" style="height: 70px; width: auto;" />
             <a class="navbar-brand fs-4" href="#">Engineering Services</a>
           </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
           <div class="collapse navbar-collapse" id="navbarColor01">
             <ul class="navbar-nav ms-auto fs-5">
-              <li class="nav-item ">
-                <a class="nav-link active" href="#">Home
-                  <span class="visually-hidden">(current)</span>
-                </a>
+              <li class="nav-item">
+                <a class="nav-link active" href="#"><i class="fa-solid fa-house me-2 d-none d-md-inline" style="color: rgb(63, 213, 191);"></i><span class="d-md-none">HOME</span></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'emlist' %}">Employees</a>
+                <a class="nav-link" href="{% url 'emlist' %}"><i class="fa-solid fa-user me-2 d-none d-md-inline" style="color: rgb(63, 213, 191);"></i><span class="d-md-none">EMPLOYEES</span></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'uploadexcel' %}">Upload</a>
+                <a class="nav-link" href="{% url 'uploadexcel' %}"><i class="fa-solid fa-upload me-2 d-none d-md-inline" style="color: rgb(63, 213, 191);"></i><span class="d-md-none">UPLOAD</span></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'addemployee' %}">Add Employee</a>
+                <a class="nav-link" href="{% url 'addemployee' %}"><i class="fa-solid fa-user-plus me-2 d-none d-md-inline" style="color: rgb(63, 213, 191);"></i><span class="d-md-none">ADD EMPLOYEE</span></a>
               </li>
             </ul>
           </div>
-
-        </nav>
+        </div>
+      </nav>
+      
+      
       </header>
     <div class="container mt-3">{% block content %}{% include 'messages.html' %}{% endblock %}</div>
 
@@ -66,7 +72,5 @@
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
     ></script>
-
-   
   </body>
 </html>

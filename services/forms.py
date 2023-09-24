@@ -7,11 +7,11 @@ class EmployeeForm(forms.ModelForm):
         model = Employee
         fields = '__all__'
 
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #     # Add a CSS class to each input field
-    #     for field_name, field in self.fields.items():
-    #         field.widget.attrs['class'] = 'custom-input'
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add a CSS class to each input field
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'custom-input'
 
 class ExcelUploadForm(forms.Form):
     excel_file = forms.FileField(
