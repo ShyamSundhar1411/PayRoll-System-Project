@@ -9,11 +9,185 @@
   div {
     font-family: "Montserrat", sans-serif;
   }
+  .butt {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    background: #183153;
+    font-family: "Montserrat", sans-serif;
+    box-shadow: 0px 6px 24px 0px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    border: none;
+  }
+
+  .butt:after {
+    content: " ";
+    width: 0%;
+    height: 100%;
+    background: rgb(63, 213, 191);
+    position: absolute;
+    transition: all 0.4s ease-in-out;
+    right: 0;
+  }
+
+  .butt:hover::after {
+    right: auto;
+    left: 0;
+    width: 100%;
+  }
+
+  .butt span {
+    text-align: center;
+    text-decoration: none;
+    width: 100%;
+    padding: 10px;
+    color: #fff;
+    font-size: 1em;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    z-index: 20;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .butt:hover span {
+    color: #183153;
+    animation: scaleUp 0.3s ease-in-out;
+  }
+
+  @keyframes scaleUp {
+    0% {
+      transform: scale(1);
+    }
+
+    50% {
+      transform: scale(0.95);
+    }
+
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  .button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #e8e8e8;
+    background-color: #2a276d;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    text-transform: uppercase;
+    border: 2px solid #212121;
+    border-radius: 10px;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    box-shadow: 5px 5px 2px rgba(0, 0, 0, 0.15), 2px 2px 2px rgba(0, 0, 0, 0.1),
+      -3px -3px 2px rgba(255, 255, 255, 0.05),
+      -2px -2px 1px rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .button .span {
+    position: relative;
+    z-index: 2;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .button::before {
+    content: "";
+    position: absolute;
+    background-color: #e8e8e8;
+    width: 100%;
+    height: 100%;
+    left: 0%;
+    bottom: 0%;
+    transform: translate(-100%, 100%);
+    border-radius: 10px;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .button:hover::before {
+    transform: translate(0, 0);
+    transition-delay: 0.4s;
+  }
+
+  .button:hover .span {
+    scale: 1.2;
+  }
+
+  .button:hover {
+    box-shadow: none;
+  }
+
+  .button:active {
+    scale: 0.95;
+  }
+
+  .delete {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgb(108, 105, 105);
+    border: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.164);
+    cursor: pointer;
+    transition-duration: 0.3s;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .svgIcon {
+    width: 12px;
+    transition-duration: 0.3s;
+  }
+
+  .svgIcon path {
+    fill: white;
+  }
+
+  .delete:hover {
+    width: 140px;
+    border-radius: 50px;
+    transition-duration: 0.3s;
+    background-color: rgb(255, 69, 69);
+    align-items: center;
+  }
+
+  .delete:hover .svgIcon {
+    width: 50px;
+    transition-duration: 0.3s;
+    transform: translateY(60%);
+  }
+
+  .delete::before {
+    position: absolute;
+    top: -20px;
+    content: "Delete";
+    color: white;
+    transition-duration: 0.3s;
+    font-size: 2px;
+  }
+
+  .delete:hover::before {
+    font-size: 13px;
+    opacity: 1;
+    transform: translateY(30px);
+    transition-duration: 0.3s;
+  }
+
 </style>
 
 <div class="row mt-5">
   <div class="col-md-6">
-    <h2>Employees</h2>
+    <h2 class="fw-bold">Employees</h2>
   </div>
   <div class="col-md-6">
     <form method="get" class="d-flex">
@@ -23,7 +197,9 @@
         placeholder="Search"
         name="{{ employee_filter.form.search.name }}"
       />
-      <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
+      <button class="button">
+        <span class="span">🔎</span>
+      </button>
     </form>
   </div>
 </div>
@@ -48,26 +224,40 @@
     SA
     <a href="?sort=sa"><span class="sort-indicator"></span></a>
   </div>
-  <div class="col-md-2">
-    HRA
-    <a href="?sort=hra"><span class="sort-indicator"></span></a>
-  </div>
+  <div class="col-md-2">Delete</div>
 </div>
 
 {% for item in employee_filter.qs %}
-<div class="row border border-secondary rounded p-5 mb-3 bg-light">
-  <div class="col-md-2"><a href="{% url 'profile' item.emp_code %}">{{ item.emp_name }}</a></div>
+<div class="row border border-secondary rounded p-5 mb-4 bg-light">
+  <div class="col-md-2">
+    <a
+      href="{% url 'profile' item.emp_code %}"
+      class="text-decoration-none text-primary text-capitalize"
+      >{{ item.emp_name }}</a
+    >
+  </div>
   <div class="col-md-2">{{item.emp_code}}</div>
   <div class="col-md-2">{{item.department}}</div>
   <div class="col-md-2">{{item.basic_pay}}</div>
   <div class="col-md-2">{{item.sa}}</div>
-  <div class="col-md-2">{{item.hra}}</div>
+  <div class="col-md-2">
+    <form method="post" action="{% url 'delete_employee' item.emp_code %}">
+      {% csrf_token %}
+      <button type="submit" class="delete">
+        <svg viewBox="0 0 448 512" class="svgIcon">
+          <path
+            d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"
+          ></path>
+        </svg>
+      </button>
+    </form>
+  </div>
 </div>
 {% endfor %}
 
-<a href="{% url 'addemployee' %}">
-  <button type="button" class="btn btn-primary btn-block mt-3 rounded">
-    <i class="fa-solid fa-plus" ></i> Add Employee
+<a href="{% url 'addemployee' %}" class="text-decoration-none">
+  <button class="butt">
+    <span><i class="fa-solid fa-plus"></i> Add Employee</span>
   </button>
 </a>
 
