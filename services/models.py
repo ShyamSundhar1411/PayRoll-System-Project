@@ -25,7 +25,7 @@ class Payslip(models.Model):
     employee = models.ForeignKey(
         Employee, to_field="emp_code", on_delete=models.CASCADE
     )
-    month = models.IntegerField()
+    month = models.CharField(max_length=15)
     year = models.IntegerField(default=date.today().year)
     total_days_worked = models.IntegerField()
     absent_days = models.IntegerField()

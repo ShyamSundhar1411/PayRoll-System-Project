@@ -8,9 +8,9 @@ from django import forms
 class MonthFilter(django_filters.FilterSet):
     MONTH_CHOICES = [
         ('', 'Select Month'),
-        (1, 'January'), (2, 'February'), (3, 'March'), (4, 'April'),
-        (5, 'May'), (6, 'June'), (7, 'July'), (8, 'August'),
-        (9, 'September'), (10, 'October'), (11, 'November'), (12, 'December'),
+        ('January', 'January'), ('February', 'February'), ('March', 'March'), ('April', 'April'),
+        ('May', 'May'), ('June', 'June'), ('July', 'July'), ('August', 'August'),
+        ('September', 'September'), ('October', 'October'), ('November', 'November'), ('December', 'December'),
     ]
 
     month = django_filters.ChoiceFilter(
@@ -35,7 +35,7 @@ class MonthFilter(django_filters.FilterSet):
     def filter_by_month(self, queryset, name, value):
         if value:
             # Filter by the selected month
-            return queryset.filter(month=int(value))
+            return queryset.filter(month=value)
         else:
             # Return the queryset unfiltered if no month is selected
             return queryset

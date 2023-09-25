@@ -1,10 +1,10 @@
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, render, redirect
 from .models import Employee, Payslip
 from .forms import EmployeeForm, ExcelUploadForm
 from .filters import MonthFilter, EmployeeFilter
 import pandas as pd
-import math
+import math, csv
 from django.db.models import F
 
 
@@ -41,11 +41,14 @@ def emlist(request):
 
     return render(request, "services/emlist.html", context)
 
+
 def delete_employee(request, emp_code):
-    if request.method == 'POST':
+    if request.method == "POST":
         employee = get_object_or_404(Employee, emp_code=emp_code)
         employee.delete()
-        return redirect('emlist')  # Replace 'employee_list' with the URL name of your employee list page
+        return redirect(
+            "emlist"
+        )  # Replace 'employee_list' with the URL name of your employee list page
     else:
         return HttpResponseBadRequest("Invalid Request Method")
 
@@ -139,3 +142,63 @@ def profile(request, user_id):
     payslips = Payslip.objects.filter(employee=employee)
     context = {"employee": employee, "payslips": payslips}
     return render(request, "services/profile.html", context)
+
+
+def export_payslip(request):
+    response = HttpResponse(content_type="text/csv")
+    response["Content-Disposition"] = "attachment; filename=payslip.csv"
+
+    writer = csv.writer(response)
+
+    payslips = Payslip.objects.all()
+
+    writer.writerow(
+        [
+            "Name",
+            "ID",
+            "Month",
+            "Days worked",
+            "OT hours",
+            "Basic",
+            "SA",
+            "HRA",
+            "PRA_gain",
+            "Total",
+            "OT Amt.",
+            "ATTD. Bonus",
+            "Gross Salary",
+            "LOP",
+            "ESI",
+            "PRA_gain",
+            "ID CARD",
+            "Total",
+            "Net Salary",
+        ]
+    )
+
+    for payslip in payslips:
+        writer.writerow(
+            [
+                payslip.employee.emp_name,
+                payslip.employee.emp_code,
+                payslip.month,
+                payslip.total_days_worked,
+                payslip.overtime_hrs,
+                payslip.employee.basic_pay,
+                payslip.employee.sa,
+                payslip.employee.hra,
+                payslip.employee.pra_gain,
+                payslip.total_earnings,
+                payslip.overtime_rate,
+                payslip.employee.att_bonus,
+                payslip.gross_salary,
+                payslip.employee.lop,
+                payslip.employee.esi,
+                payslip.employee.pra_loss,
+                payslip.employee.id_card,
+                payslip.total_deductions,
+                payslip.net_salary,
+            ]
+        )
+    
+    return response
