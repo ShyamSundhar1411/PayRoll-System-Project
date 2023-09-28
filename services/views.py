@@ -81,30 +81,42 @@ def upload_file(request):
 
             present = {}
             total_days = {}
-            for i, j in employee_status.items():
-                days_worked = 0
-                total_days[i] = len(j)
-                for k in j:
-                    if k == "P":
-                        days_worked += 1
-                present[i] = days_worked
 
             for i, j in employee_total.items():
+                days_worked = 0
                 ot = 0
+                wof_hours = 0
+                total_days[i] = len(j)
                 for k in j:
                     hours_worked = k.hour + k.minute / 60
                     diff = hours_worked - 9
                     ot += max(math.floor(diff), 0)
+                    # Check if the status on this day is "WO"
+                    status_index = j.index(k)
+                    if employee_status[i][status_index] == "WO":
+                        wof_hours += max(
+                            math.floor(hours_worked), 0
+                        )  # Accumulate WOF hours
+                    else:
+                        if hours_worked > 9:
+                            days_worked += 1
+
+                present[i] = days_worked
+
                 employee = Employee.objects.get(emp_code=i)
                 basicpay_perday = employee.basic_pay / 30
                 basicpay_perhour = basicpay_perday / 24
                 ot_amount = basicpay_perhour * ot
 
+                wof_rate = basicpay_perhour * wof_hours
+
                 total_earnings = (
                     employee.basic_pay + employee.sa + employee.hra + employee.pra_gain
                 )
 
-                gross_salary = total_earnings + employee.att_bonus + ot_amount
+                gross_salary = (
+                    total_earnings + employee.att_bonus + ot_amount + wof_rate
+                )
 
                 total_deductions = (
                     employee.pra_loss + employee.esi + employee.lop + employee.id_card
@@ -118,8 +130,11 @@ def upload_file(request):
 
                 payslip = Payslip.objects.create(
                     employee=employee,
+                    total_days=total_days[i],
                     total_days_worked=present[i],
                     absent_days=(total_days[i] - present[i]),
+                    WOF_hrs=wof_hours,
+                    WOF_rate=wof_rate,
                     overtime_hrs=ot,
                     overtime_rate=ot_amount,
                     total_earnings=total_earnings,
@@ -127,26 +142,33 @@ def upload_file(request):
                     total_deductions=total_deductions,
                     net_salary=net_salary,
                     month=selected_month,
-                    year=selected_year
+                    year=selected_year,
                 )
                 payslip.save()
 
-            return redirect("success")
+            return redirect("payslip")
     else:
         form = ExcelUploadForm()
 
-    return render(request, "services/home.html", {"form": form})
+    return render(request, "services/upload.html", {"form": form})
 
 
-def success(request):
+def payslip(request):
     payslip = MonthFilter(data=request.GET, queryset=Payslip.objects.all())
-    
-    # Extract the selected month and year from the filter form
-    selected_month = request.GET.get('month')
-    selected_year = request.GET.get('year')
-    
-    return render(request, "services/success.html", {"filter": payslip, "selected_month": selected_month, "selected_year": selected_year})
 
+    # Extract the selected month and year from the filter form
+    selected_month = request.GET.get("month")
+    selected_year = request.GET.get("year")
+
+    return render(
+        request,
+        "services/payslip.html",
+        {
+            "filter": payslip,
+            "selected_month": selected_month,
+            "selected_year": selected_year,
+        },
+    )
 
 
 def profile(request, user_id):
@@ -222,7 +244,9 @@ def export_payslip(request, selected_month, selected_year):
     ws = wb.active
 
     blue_fill = PatternFill(start_color="6B6BEF", end_color="6B6BEF", fill_type="solid")
-    green_fill = PatternFill(start_color="00FF00", end_color="00FF00", fill_type="solid")
+    green_fill = PatternFill(
+        start_color="00FF00", end_color="00FF00", fill_type="solid"
+    )
 
     # Query all payslips of Payslip
     payslips = Payslip.objects.filter(month=selected_month, year=selected_year)
@@ -231,7 +255,7 @@ def export_payslip(request, selected_month, selected_year):
 
     merge_rows_AB_DE = ["Earning", "Authorized Signatory", " "]
     merge_rows_BC = ["Employee Name", "Employee Code", "Designation", "Department"]
-    
+
     # Iterate over each Payslip payslip and add data to the list
     for payslip in payslips:
         common_data = [
@@ -255,31 +279,44 @@ def export_payslip(request, selected_month, selected_year):
             )
 
         data = [
-            ["Employee Name", payslip.employee.emp_name, "", "Total Days", 30],
             [
-                "Employee Code",
-                payslip.employee.emp_code,
+                "Employee Name",
+                payslip.employee.emp_name,
                 "",
                 "Paid Days",
                 payslip.total_days_worked,
             ],
             [
-                "Designation",
-                payslip.employee.department,
+                "Employee Code",
+                payslip.employee.emp_code,
                 "",
                 "LOPs",
                 payslip.absent_days,
             ],
             [
-                "Department",
+                "Designation",
                 payslip.employee.department,
                 "",
                 "OT hours",
                 payslip.overtime_hrs,
             ],
+            [
+                "Department",
+                payslip.employee.department,
+                "",
+                "WOF hours",
+                payslip.WOF_hrs,
+            ],
+            ["Total Days", payslip.total_days],
             [" "],
             ["Earning", "", "", "Deductions", ""],
-            ["Basic",f"₹{payslip.employee.basic_pay}", "", "LOP", f"₹{payslip.employee.lop}"],
+            [
+                "Basic",
+                f"₹{payslip.employee.basic_pay}",
+                "",
+                "LOP",
+                f"₹{payslip.employee.lop}",
+            ],
             [
                 "SA",
                 f"₹{payslip.employee.sa}",
@@ -287,7 +324,13 @@ def export_payslip(request, selected_month, selected_year):
                 "ESI/Health Insurance",
                 f"₹{payslip.employee.esi}",
             ],
-            ["HRA", f"₹{payslip.employee.hra}", "", "PRA", f"₹{payslip.employee.pra_loss}"],
+            [
+                "HRA",
+                f"₹{payslip.employee.hra}",
+                "",
+                "PRA",
+                f"₹{payslip.employee.pra_loss}",
+            ],
             [
                 "PRA",
                 f"₹{payslip.employee.pra_gain}",
@@ -295,6 +338,7 @@ def export_payslip(request, selected_month, selected_year):
                 "Loan Recovery",
                 f"₹{payslip.employee.id_card}",
             ],
+            ["WOF", f"₹{payslip.WOF_rate}"],
             ["OT", f"₹{payslip.overtime_rate}"],
             ["Attd. Bonus", f"₹{payslip.employee.att_bonus}"],
             [
@@ -365,7 +409,11 @@ def export_payslip(request, selected_month, selected_year):
         # Apply the custom font style to the entire workbook
         for row in ws.iter_rows():
             for cell in row:
-                if cell.value in ["Earning", "Deductions", "Net Payable",payslip.net_salary]:
+                if cell.value in [
+                    "Earning",
+                    "Deductions",
+                    "Net Payable",
+                ]:
                     cell.font = Font(
                         name="Lucida Console",
                         size=12,
@@ -403,10 +451,12 @@ def export_payslip(request, selected_month, selected_year):
                     payslip.gross_salary,
                     payslip.total_deductions,
                     payslip.absent_days,
+                    payslip.total_days,
                     payslip.employee.lop,
                     payslip.employee.esi,
                     payslip.employee.id_card,
-                    30
+                    payslip.WOF_hrs,
+                    payslip.WOF_rate
                 ]:
                     cell.alignment = Alignment(horizontal="left", vertical="center")
 

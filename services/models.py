@@ -22,11 +22,12 @@ class Employee(models.Model):
 
 
 class Payslip(models.Model):
-    employee = models.ForeignKey(
-        Employee, to_field="emp_code", on_delete=models.CASCADE
-    )
+    employee = models.ForeignKey(Employee, to_field="emp_code", on_delete=models.CASCADE)
     month = models.CharField(max_length=15)
     year = models.IntegerField(default=date.today().year)
+    total_days = models.IntegerField()
+    WOF_hrs = models.IntegerField()
+    WOF_rate = models.DecimalField(max_digits=10, decimal_places=2)
     total_days_worked = models.IntegerField()
     absent_days = models.IntegerField()
     overtime_hrs = models.IntegerField()
