@@ -30,7 +30,6 @@ v) pip install openpyxl
 
 4.Apply the initial database migrations:
 
-python manage.py makemigrations
 python manage.py migrate
 
 
