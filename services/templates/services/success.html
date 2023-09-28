@@ -1,12 +1,35 @@
 {% extends 'base.html' %} {% block content %} {% load crispy_forms_tags %}
 <style>
-  div{
-    font-family: 'Montserrat', sans-serif;
+  div {
+    font-family: "Montserrat", sans-serif;
   }
 </style>
 
+<div class="row">
+  <h1 class="col-md-6">Payroll Details</h1>
+  {% if filter.form.month.value and filter.form.year.value %}
+  <a
+    href="{% url 'export_salary_summary' filter.form.month.value|slugify filter.form.year.value %}"
+    class="text-decoration-none col-md-3 mt-2"
+  >
+    <button class="btn btn-primary">
+      <span><i class="fa-solid fa-plus"></i> salary summary</span>
+    </button>
+  </a>
+  <a
+    href="{% url 'export_payslip' filter.form.month.value|slugify filter.form.year.value %}"
+    class="text-decoration-none col-md-3 mt-2"
+  >
+    <button class="btn btn-primary">
+      <span><i class="fa-solid fa-plus"></i> payslip</span>
+    </button>
+  </a>
+  {% else %}
+  <!-- Handle the case when month and year are not selected -->
+  <p>Please select a month and year to export data.</p>
+  {% endif %}
+</div>
 
-<h1 >Payroll Details </h1>
 <form method="get" class="mt-3">
   <!-- {{ filter.form.as_p }} -->
   <div class="row">
@@ -16,16 +39,35 @@
   <button type="submit" class="btn btn-primary mt-1">Filter</button>
 </form>
 
-<div class="row mb-5">
+<div class="row mb-2">
   {% for pay in filter.qs %}
   <div class="col-12 col-md-6">
     <div class="border border-dark rounded-4 mt-4">
-      
       <div class="section ms-4 mt-3">
+        <h3
+          class="p-2 me-4 rounded text-center"
+          style="background-color: rgb(160, 160, 243)"
+        >
+          Ministon Engineering Services
+        </h3>
+        <h5
+          class="p-2 me-4 rounded text-center"
+          style="background-color: rgb(107, 107, 239)"
+        >
+          EAST POTHERI, KATTANKULATHUR, CHENNAI - 603 203
+        </h5>
+        <h5
+        class="p-2 me-4 rounded text-capitalize text-center"
+        style="background-color: rgb(107, 107, 239)"
+      >
+        Salary Summary of the month:  {{ pay.month }} - {{ pay.year }}
+      </h5>
         <h3 class="fw-bold">Employee Details</h3>
         <div class="row">
           <div class="col-6 col-md-3">Emplyee name</div>
-          <div class="col-6 col-md-3 fw-bold text-capitalize">{{ pay.employee.emp_name }}</div>
+          <div class="col-6 col-md-3 fw-bold text-capitalize ">
+            {{ pay.employee.emp_name }}
+          </div>
           <div class="col-6 col-md-3">Days Worked</div>
           <div class="col-6 col-md-3">{{ pay.total_days_worked }}</div>
         </div>
@@ -42,8 +84,10 @@
           <div class="col-6 col-md-3">{{ pay.absent_days }}</div>
         </div>
         <div class="row">
-          <div class="col-6 col-md-3">DOB</div>
+          <div class="col-6 col-md-3">Designation</div>
           <div class="col-6 col-md-3">{{ pay.employee.emp_code }}</div>
+          <div class="col-6 col-md-3">Month</div>
+          <div class="col-6 col-md-3 fw-bold text-capitalize">{{ pay.month }}</div>
         </div>
       </div>
 
@@ -77,7 +121,9 @@
             </div>
             <div class="row">
               <div class="col-6 col-md-6 text-success">Gross Earnings</div>
-              <div class="col-6 col-md-6 text-success">₹ {{ pay.gross_salary }}</div>
+              <div class="col-6 col-md-6 text-success">
+                ₹ {{ pay.gross_salary }}
+              </div>
             </div>
           </div>
 
@@ -101,7 +147,9 @@
             </div>
             <div class="row">
               <div class="col-6 col-md-6 text-danger">Total Deductions</div>
-              <div class="col-6 col-md-6 text-danger">₹ {{ pay.total_deductions }}</div>
+              <div class="col-6 col-md-6 text-danger">
+                ₹ {{ pay.total_deductions }}
+              </div>
             </div>
           </div>
         </div>
@@ -109,13 +157,22 @@
 
       <div class="section mt-3">
         <div class="row">
-          <h3 class="col-6 col-md-6 text-center" style="font-weight: bold;">Net Payable</h3>
+          <h3 class="col-6 col-md-6 text-center" style="font-weight: bold">
+            Net Payable
+          </h3>
           <h3 class="col-6 col-md-6 fw-bold">₹ {{ pay.net_salary }}</h3>
+        </div>
+        <br />
+        <br />
+        <br />
+        <div class="row">
+          <p class="col-6 col-md-6 text-center">Authorized Signature</p>
+          <p class="col-6 col-md-6">Employee Signature</p>
         </div>
       </div>
     </div>
   </div>
   {% if forloop.counter|divisibleby:2 %}
 </div>
-<div class="row">{% endif %} {% endfor %}</div>
+<div class="row mb-4">{% endif %} {% endfor %}</div>
 {% endblock %}

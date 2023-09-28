@@ -6,17 +6,16 @@
       <strong>Employee Code:</strong> {{ employee.emp_code }}<br>
       <strong>Department:</strong> {{ employee.department }}<br>
       <strong>Date of Birth:</strong> {{ employee.dob }}<br>
-      <!-- Add other employee details as needed -->
     
       <h3>Payslips</h3>
       <ul>
         {% for payslip in payslips %}
           <li>Month: {{ payslip.month }}, Year: {{ payslip.year }}</li>
           <li>Total Days Worked: {{ payslip.total_days_worked }}</li>
-          <!-- Add other payslip details as needed -->
         {% endfor %}
       </ul>
     </div>
     <a href="{% url 'emlist' %}" class="btn btn-primary">Back to Employee List</a>
   </div>
+
 {% endblock %}

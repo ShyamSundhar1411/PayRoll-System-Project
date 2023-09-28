@@ -27,8 +27,10 @@ urlpatterns = [
     path("uploadexcel", views.upload_file, name="uploadexcel"),
     path("success", views.success, name="success"),
     path("emlist", views.emlist, name='emlist'),
+    path("export_salary_summary/<str:selected_month>/<int:selected_year>/", views.export_salary_summary, name='export_salary_summary'),
     path("profile/<int:user_id>/", views.profile, name='profile'),
-     path('delete_employee/<int:emp_code>/', views.delete_employee, name='delete_employee'),
+    path('export_payslip/<str:selected_month>/<int:selected_year>/', views.export_payslip, name='export_payslip'),
+    path('delete_employee/<int:emp_code>/', views.delete_employee, name='delete_employee'),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
