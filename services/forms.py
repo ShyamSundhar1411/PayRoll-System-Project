@@ -21,13 +21,18 @@ class ExcelUploadForm(forms.Form):
 
     MONTH_CHOICES = [
         ('', 'Select Month'),
-        (1, 'January'), (2, 'February'), (3, 'March'), (4, 'April'),
-        (5, 'May'), (6, 'June'), (7, 'July'), (8, 'August'),
-        (9, 'September'), (10, 'October'), (11, 'November'), (12, 'December'),
+        ('january', 'January'), ('february', 'February'), ('march', 'March'), ('april', 'April'),
+        ('may', 'May'), ('june', 'June'), ('july', 'July'), ('august', 'August'),
+        ('september', 'September'), ('october', 'October'), ('november', 'November'), ('december', 'December'),
     ]
 
     selected_month = forms.ChoiceField(
         label='Select Month',
         choices=MONTH_CHOICES,
         required=False,  # Allow an empty selection
+    )
+
+    year = forms.IntegerField(
+        label='Select Year',
+        required=False,
     )

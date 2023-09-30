@@ -8,4 +8,4 @@ class EmployeeAdmin(admin.ModelAdmin):
 
 @admin.register(Payslip)
 class PayslipAdmin(admin.ModelAdmin):
-    list_display = ('employee','total_days_worked','overtime_hrs','overtime_rate','gross_salary','month')
+    list_display = ('id','employee','total_days_worked','overtime_hrs','overtime_rate','gross_salary','month')

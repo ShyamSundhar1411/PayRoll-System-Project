@@ -1,22 +1,152 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %} {% block content %} {% load crispy_forms_tags %}
+<style>
+  div {
+    font-family: "Montserrat", sans-serif;
+    font-size:20px;
+  }
+</style>
 <div class="container">
-    <h2>Employee Details</h2>
-    <div>
-      <strong>Name:</strong> {{ employee.emp_name }}<br>
-      <strong>Employee Code:</strong> {{ employee.emp_code }}<br>
-      <strong>Department:</strong> {{ employee.department }}<br>
-      <strong>Date of Birth:</strong> {{ employee.dob }}<br>
-      <!-- Add other employee details as needed -->
-    
-      <h3>Payslips</h3>
-      <ul>
-        {% for payslip in payslips %}
-          <li>Month: {{ payslip.month }}, Year: {{ payslip.year }}</li>
-          <li>Total Days Worked: {{ payslip.total_days_worked }}</li>
-          <!-- Add other payslip details as needed -->
-        {% endfor %}
-      </ul>
+    <div class="row">
+      <h1 class="col-md-12 text-capitalize">Payroll Details of {{ employee.emp_name }}</h1>
     </div>
+    
+    <div class="row mb-2">
+      {% for pay in payslips %}
+      <div class="col-12 ">
+        <div class="border border-dark rounded-4 mt-4">
+          <div class="section ms-4 mt-3">
+            <h3
+              class="p-2 me-4 rounded text-center"
+              style="background-color: rgb(160, 160, 243)"
+            >
+              Ministon Engineering Services
+            </h3>
+            <h5
+              class="p-2 me-4 rounded text-center"
+              style="background-color: rgb(107, 107, 239)"
+            >
+              EAST POTHERI, KATTANKULATHUR, CHENNAI - 603 203
+            </h5>
+            <h5
+            class="p-2 me-4 rounded text-capitalize text-center fw-bold"
+            style="background-color: rgb(107, 107, 239)"
+          >
+            Salary Summary of the month:  {{ pay.month }} - {{ pay.year }}
+          </h5>
+            <h3 class="fw-bold">Employee Details</h3>
+            <div class="row">
+              <div class="col-6 col-md-3">Emplyee name</div>
+              <div class="col-6 col-md-3 fw-bold text-capitalize ">
+                {{ employee.emp_name }}
+              </div>
+              <div class="col-6 col-md-3">Days Worked</div>
+              <div class="col-6 col-md-3">{{ pay.total_days_worked }}</div>
+            </div>
+            <div class="row">
+              <div class="col-6 col-md-3">Emplyee code</div>
+              <div class="col-6 col-md-3 fw-bold">{{ employee.emp_code }}</div>
+              <div class="col-6 col-md-3">LOP</div>
+              <div class="col-6 col-md-3">{{ pay.absent_days }}</div>
+
+            </div>
+            <div class="row">
+              <div class="col-6 col-md-3">Department</div>
+              <div class="col-6 col-md-3">{{ employee.department }}</div>
+              <div class="col-6 col-md-3">Overtime hours</div>
+              <div class="col-6 col-md-3">{{ pay.overtime_hrs }}</div>
+            </div>
+            <div class="row">
+              <div class="col-6 col-md-3">Designation</div>
+              <div class="col-6 col-md-3">{{ employee.designation }}</div>
+              <div class="col-6 col-md-3">WOF hours</div>
+              <div class="col-6 col-md-3">{{ pay.WOF_hrs }}</div>
+            </div>
+            <div class="row">
+              <div class="col-6 col-md-3">Total Days</div>
+              <div class="col-6 col-md-3">{{ pay.total_days }}</div>
+            </div>
+          </div>
+    
+          <div class="section ms-4 mt-3">
+            <div class="row">
+              <div class="col-md-6">
+                <h3 class="fw-bold">Earnings</h3>
+                <div class="row">
+                  <div class="col-6 col-md-6">Basic</div>
+                  <div class="col-6 col-md-6">₹ {{ employee.basic_pay }}</div>
+                </div>
+                <div class="row">
+                  <div class="col-6 col-md-6">SA</div>
+                  <div class="col-6 col-md-6">₹ {{ employee.sa }}</div>
+                </div>
+                <div class="row">
+                  <div class="col-6 col-md-6">HRA</div>
+                  <div class="col-6 col-md-6">₹ {{ employee.hra }}</div>
+                </div>
+                <div class="row">
+                  <div class="col-6 col-md-6">PRA</div>
+                  <div class="col-6 col-md-6">₹ {{ employee.pra_gain }}</div>
+                </div>
+                <div class="row">
+                  <div class="col-6 col-md-6">Attd. Bonus</div>
+                  <div class="col-6 col-md-6">₹ {{ employee.att_bonus }}</div>
+                </div>
+                <div class="row">
+                  <div class="col-6 col-md-6">Overtime rate</div>
+                  <div class="col-6 col-md-6">₹ {{ pay.overtime_rate }}</div>
+                </div>
+                <div class="row">
+                  <div class="col-6 col-md-6 text-success">Gross Earnings</div>
+                  <div class="col-6 col-md-6 text-success">
+                    ₹ {{ pay.gross_salary }}
+                  </div>
+                </div>
+              </div>
+    
+              <div class="col-md-6">
+                <h3 class="fw-bold">Deductions</h3>
+                <div class="row">
+                  <div class="col-6 col-md-6">PRA</div>
+                  <div class="col-6 col-md-6">₹ {{ employee.pra_loss }}</div>
+                </div>
+                <div class="row">
+                  <div class="col-6 col-md-6">ESI</div>
+                  <div class="col-6 col-md-6">₹ {{ employee.esi }}</div>
+                </div>
+                <div class="row">
+                  <div class="col-6 col-md-6">LOP</div>
+                  <div class="col-6 col-md-6">₹ {{ employee.lop }}</div>
+                </div>
+                <div class="row">
+                  <div class="col-6 col-md-6">ID Card</div>
+                  <div class="col-6 col-md-6">₹ {{ employee.id_card }}</div>
+                </div>
+                <div class="row">
+                  <div class="col-6 col-md-6 text-danger">Total Deductions</div>
+                  <div class="col-6 col-md-6 text-danger">
+                    ₹ {{ pay.total_deductions }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    
+          <div class="section mt-3 mb-2">
+            <div class="row">
+              <h3 class="col-6 col-md-6 text-center" style="font-weight: bold">
+                Net Payable
+              </h3>
+              <h3 class="col-6 col-md-6 fw-bold">₹ {{ pay.net_salary }}</h3>
+            </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="row">
+      <div class="col-md-3 mt-3">
     <a href="{% url 'emlist' %}" class="btn btn-primary">Back to Employee List</a>
   </div>
+  </div>
+  </div>
+
 {% endblock %}

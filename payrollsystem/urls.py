@@ -22,13 +22,15 @@ from services import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", views.success, name="success"),
+    path("", views.payslip, name="payslip"),
     path("addemployee", views.input_employee_rates, name="addemployee"),
     path("uploadexcel", views.upload_file, name="uploadexcel"),
-    path("success", views.success, name="success"),
+    path("payslip", views.payslip, name="payslip"),
     path("emlist", views.emlist, name='emlist'),
+    path("export_salary_summary/<str:selected_month>/<int:selected_year>/", views.export_salary_summary, name='export_salary_summary'),
     path("profile/<int:user_id>/", views.profile, name='profile'),
-     path('delete_employee/<int:emp_code>/', views.delete_employee, name='delete_employee'),
+    path('export_payslip/<str:selected_month>/<int:selected_year>/', views.export_payslip, name='export_payslip'),
+    path('delete_employee/<int:emp_code>/', views.delete_employee, name='delete_employee'),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
