@@ -4,7 +4,7 @@ from .models import Employee, Payslip
 from .forms import EmployeeForm, ExcelUploadForm
 from .filters import MonthFilter, EmployeeFilter
 import pandas as pd
-import math, csv
+import math, csv, datetime
 from django.db.models import F
 from openpyxl import Workbook
 from openpyxl.utils import get_column_letter
@@ -18,7 +18,7 @@ def input_employee_rates(request):
         if form.is_valid():
             print("form is valid")
             form.save()
-            return redirect("success")
+            return redirect("addemployee")
 
     else:
         print("Error")
@@ -88,18 +88,20 @@ def upload_file(request):
                 wof_hours = 0
                 total_days[i] = len(j)
                 for k in j:
-                    hours_worked = k.hour + k.minute / 60
-                    diff = hours_worked - 9
-                    ot += max(math.floor(diff), 0)
-                    # Check if the status on this day is "WO"
-                    status_index = j.index(k)
-                    if employee_status[i][status_index] == "WO":
-                        wof_hours += max(
-                            math.floor(hours_worked), 0
-                        )  # Accumulate WOF hours
-                    else:
-                        if hours_worked > 9:
-                            days_worked += 1
+                    if isinstance(k, str):
+                        total_in_str = k.split(':')
+                        hours_worked = datetime.timedelta(hours=int(total_in_str[0]), minutes=int(total_in_str[1])).total_seconds() / 3600
+                        diff = hours_worked - 9
+                        ot += max(math.floor(diff), 0)
+                        # Check if the status on this day is "WO"
+                        status_index = j.index(k)
+                        if employee_status[i][status_index] == "WO":
+                            wof_hours += max(
+                                math.floor(hours_worked), 0
+                            )  # Accumulate WOF hours
+                        else:
+                            if hours_worked > 9:
+                                days_worked += 1
 
                 present[i] = days_worked
 
