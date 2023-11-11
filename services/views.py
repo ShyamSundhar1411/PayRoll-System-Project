@@ -71,13 +71,17 @@ def upload_file(request):
                 emp_code = row["Emp_Code"]
                 status = row["Status"]
                 total = row["Total"]
+                if pd.isna(total):
+                    total = pd.to_datetime("00:00:00")
                 if not pd.isna(emp_code):
                     current_emp_code = emp_code
                     employee_status[current_emp_code] = []
                     employee_total[current_emp_code] = []
+                    print(current_emp_code)
                 if not pd.isna(status):
                     employee_status[current_emp_code].append(status)
                     employee_total[current_emp_code].append(total)
+                    
 
             present = {}
             absent = {}
@@ -90,25 +94,23 @@ def upload_file(request):
                 wof_hours = 0
                 total_days[i] = len(j)
                 for k in j:
-                        hours_worked = k.hour + k.minute / 60       
-                        diff = hours_worked - 9
-                        ot += max(math.floor(diff), 0)
-                        # Check if the status on this day is "WO"
-                        status_index = j.index(k)
-                        if employee_status[i][status_index] == "WO":
-                            wof_hours += max(
-                                math.floor(hours_worked), 0
-                            )  # Accumulate WOF hours
-                        elif employee_status[i][status_index] == "A":
-                            absent_days+=1
-                        else:
-                            if hours_worked > 9:
-                                days_worked += 1
-
+                    hours_worked = k.hour + k.minute / 60       
+                    diff = hours_worked - 9
+                    ot += max(math.floor(diff), 0)
+                    # Check if the status on this day is "WO"
+                    status_index = j.index(k)
+                    if employee_status[i][status_index] == "WO":
+                        wof_hours += max(
+                            math.floor(hours_worked), 0
+                        )  # Accumulate WOF hours
+                    elif employee_status[i][status_index] == "A":
+                        absent_days+=1
+                    else:
+                        if hours_worked > 9:
+                            days_worked += 1
+                print(i)
                 present[i] = days_worked
                 absent[i] = absent_days
-                print(absent_days)
-                
                 employee = Employee.objects.get(emp_code=i)
                 basicpay_perday = employee.basic_pay / 30
                 basicpay_perhour = basicpay_perday / 24
@@ -133,7 +135,6 @@ def upload_file(request):
                 selected_month = form.cleaned_data.get("selected_month")
 
                 selected_year = form.cleaned_data.get("year")
-
                 payslip = Payslip.objects.create(
                     employee=employee,
                     total_days=total_days[i],
