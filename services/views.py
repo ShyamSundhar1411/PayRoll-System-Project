@@ -80,17 +80,17 @@ def upload_file(request):
                     employee_total[current_emp_code].append(total)
 
             present = {}
+            absent = {}
             total_days = {}
 
             for i, j in employee_total.items():
                 days_worked = 0
+                absent_days = 0
                 ot = 0
                 wof_hours = 0
                 total_days[i] = len(j)
                 for k in j:
-                    if isinstance(k, str):
-                        total_in_str = k.split(':')
-                        hours_worked = datetime.timedelta(hours=int(total_in_str[0]), minutes=int(total_in_str[1])).total_seconds() / 3600
+                        hours_worked = k.hour + k.minute / 60       
                         diff = hours_worked - 9
                         ot += max(math.floor(diff), 0)
                         # Check if the status on this day is "WO"
@@ -99,12 +99,16 @@ def upload_file(request):
                             wof_hours += max(
                                 math.floor(hours_worked), 0
                             )  # Accumulate WOF hours
+                        elif employee_status[i][status_index] == "A":
+                            absent_days+=1
                         else:
                             if hours_worked > 9:
                                 days_worked += 1
 
                 present[i] = days_worked
-
+                absent[i] = absent_days
+                print(absent_days)
+                
                 employee = Employee.objects.get(emp_code=i)
                 basicpay_perday = employee.basic_pay / 30
                 basicpay_perhour = basicpay_perday / 24
