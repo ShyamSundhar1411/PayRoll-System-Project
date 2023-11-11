@@ -77,7 +77,6 @@ def upload_file(request):
                     current_emp_code = emp_code
                     employee_status[current_emp_code] = []
                     employee_total[current_emp_code] = []
-                    print(current_emp_code)
                 if not pd.isna(status):
                     employee_status[current_emp_code].append(status)
                     employee_total[current_emp_code].append(total)
@@ -88,15 +87,24 @@ def upload_file(request):
             total_days = {}
 
             for i, j in employee_total.items():
+                employee = Employee.objects.get(emp_code=i)
                 days_worked = 0
                 absent_days = 0
                 ot = 0
                 wof_hours = 0
                 total_days[i] = len(j)
                 for k in j:
-                    hours_worked = k.hour + k.minute / 60       
-                    diff = hours_worked - 9
-                    ot += max(math.floor(diff), 0)
+                    hours_worked = k.hour + (k.minute / 60)    
+                    if employee.emp_code == 55:   
+                        diff = hours_worked - 8
+                    else:
+                        diff = hours_worked - 9
+                    parameter = max(math.floor(diff),0)
+                    if k.minute>=30 and parameter>0:
+                        temp_ot_for_day = parameter+0.5
+                    else:
+                        temp_ot_for_day = parameter
+                    ot+=temp_ot_for_day
                     # Check if the status on this day is "WO"
                     status_index = j.index(k)
                     if employee_status[i][status_index] == "WO":
@@ -106,11 +114,18 @@ def upload_file(request):
                     elif employee_status[i][status_index] == "A":
                         absent_days+=1
                     else:
-                        if hours_worked >= 9:
-                            days_worked += 1
+                        if employee.emp_code == 55:
+                            if hours_worked >= 8:
+                            
+                                days_worked += 1
+                        else:
+                            if hours_worked >= 9:
+                            
+                                days_worked += 1
+                                
                 present[i] = days_worked
                 absent[i] = absent_days
-                employee = Employee.objects.get(emp_code=i)
+                
                 basicpay_perday = float(employee.basic_pay) / 30
                 basicpay_perhour = basicpay_perday / 9
                 ot_amount = basicpay_perhour * ot * 1.25
