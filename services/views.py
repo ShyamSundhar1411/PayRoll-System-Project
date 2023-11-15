@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from .models import Employee, Payslip
 from .forms import EmployeeForm, ExcelUploadForm
 from .filters import MonthFilter, EmployeeFilter
+from . utils import generate_dictionary
 import pandas as pd
 import math, csv, datetime
 from django.db.models import F
@@ -64,24 +65,7 @@ def upload_file(request):
             excel_file = request.FILES["excel_file"]
             df = pd.read_excel(excel_file)
 
-            employee_status = {}
-            employee_total = {}
-            current_emp_code = None
-            for index, row in df.iterrows():
-                emp_code = row["Emp_Code"]
-                status = row["Status"]
-                total = row["Total"]
-                if pd.isna(total):
-                    total = pd.to_datetime("00:00:00")
-                if not pd.isna(emp_code):
-                    current_emp_code = emp_code
-                    employee_status[current_emp_code] = []
-                    employee_total[current_emp_code] = []
-                if not pd.isna(status):
-                    employee_status[current_emp_code].append(status)
-                    employee_total[current_emp_code].append(total)
-                    
-
+            employee_status,employee_total = generate_dictionary(df)
             present = {}
             absent = {}
             total_days = {}
@@ -93,8 +77,8 @@ def upload_file(request):
                 ot = 0
                 wof_hours = 0
                 total_days[i] = len(j)
-                for k in j:
-                    hours_worked = k.hour + (k.minute / 60)    
+                for k in range(len(j)):
+                    hours_worked = j[k].hour + (j[k].minute / 60)    
                     if employee.emp_code == 55:   
                         diff = hours_worked - 8
                     elif employee.emp_code == 50:
@@ -102,20 +86,22 @@ def upload_file(request):
                     else:
                         diff = hours_worked - 9
                     parameter = max(math.floor(diff),0)
-                    if k.minute>=30 and parameter>0:
+                    if j[k].minute>=30 and parameter>0:
                         temp_ot_for_day = parameter+0.5
                     else:
                         temp_ot_for_day = parameter
                     ot+=temp_ot_for_day
                     # Check if the status on this day is "WO"
-                    status_index = j.index(k)
-                    if employee_status[i][status_index] == "WO":
-                        wof_hours += max(
-                            math.floor(hours_worked), 0
-                        )  # Accumulate WOF hours
-                    elif employee_status[i][status_index] == "A":
+                    status_index = k
+                    print("Status Index:",status_index,employee_status[i][status_index])
+                    status = employee_status[i][status_index].strip().upper()
+                    if status == "WO":
+                        print(hours_worked)
+                        wof_hours += hours_worked# Accumulate WOF hours
+                        ot+=wof_hours
+                    elif status == "A":
                         absent_days+=1
-                    else:
+                    elif status == "P":
                         if employee.emp_code == 55:
                             if hours_worked >= 8:
                             
@@ -130,7 +116,6 @@ def upload_file(request):
                                 absent_days+=1
                         else:
                             if hours_worked >= 9:
-                            
                                 days_worked += 1
                             else:
                                 absent_days+=1
@@ -164,7 +149,7 @@ def upload_file(request):
                     employee=employee,
                     total_days=total_days[i],
                     total_days_worked=present[i],
-                    absent_days=absent_days,
+                    absent_days=absent[i],
                     WOF_hrs=wof_hours,
                     WOF_rate=wof_rate,
                     overtime_hrs=ot,
