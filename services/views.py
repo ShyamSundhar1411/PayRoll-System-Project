@@ -153,7 +153,7 @@ def upload_file(request):
                     employee=employee,
                     total_days=total_days[i],
                     total_days_worked=present[i],
-                    absent_days=(total_days[i] - present[i]),
+                    absent_days=absent[i],
                     WOF_hrs=wof_hours,
                     WOF_rate=wof_rate,
                     overtime_hrs=ot,
