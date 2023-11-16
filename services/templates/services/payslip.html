@@ -68,30 +68,26 @@
           <div class="col-6 col-md-3 fw-bold text-capitalize ">
             {{ pay.employee.emp_name }}
           </div>
-          <div class="col-6 col-md-3">Days Worked</div>
-          <div class="col-6 col-md-3">{{ pay.total_days_worked }}</div>
+          <div class="col-6 col-md-3">Total Days</div>
+          <div class="col-6 col-md-3">{{ pay.total_days }}</div>
         </div>
         <div class="row">
           <div class="col-6 col-md-3">Emplyee code</div>
           <div class="col-6 col-md-3 fw-bold">{{ pay.employee.emp_code }}</div>
-          <div class="col-6 col-md-3">Overtime hours</div>
-          <div class="col-6 col-md-3">{{ pay.overtime_hrs }}</div>
+          <div class="col-6 col-md-3">Days Worked</div>
+          <div class="col-6 col-md-3">{{ pay.total_days_worked }}</div>
         </div>
         <div class="row">
           <div class="col-6 col-md-3">Department</div>
           <div class="col-6 col-md-3">{{ pay.employee.department }}</div>
-          <div class="col-6 col-md-3">LOP</div>
-          <div class="col-6 col-md-3">{{ pay.absent_days }}</div>
+          <div class="col-6 col-md-3">Overtime hours</div>
+          <div class="col-6 col-md-3">{{ pay.overtime_hrs }}</div>
         </div>
         <div class="row">
           <div class="col-6 col-md-3">Designation</div>
           <div class="col-6 col-md-3">{{ pay.employee.designation }}</div>
-          <div class="col-6 col-md-3">WOF hours</div>
-          <div class="col-6 col-md-3">{{ pay.WOF_hrs }}</div>
-        </div>
-        <div class="row">
-          <div class="col-6 col-md-3">Total Days</div>
-          <div class="col-6 col-md-3">{{ pay.total_days }}</div>
+          <div class="col-6 col-md-3">LOP</div>
+          <div class="col-6 col-md-3">{{ pay.absent_days }}</div>
         </div>
       </div>
 
@@ -122,10 +118,6 @@
             <div class="row">
               <div class="col-6 col-md-6">Overtime rate</div>
               <div class="col-6 col-md-6">₹ {{ pay.overtime_rate }}</div>
-            </div>
-            <div class="row">
-              <div class="col-6 col-md-6">WOF rate</div>
-              <div class="col-6 col-md-6">₹ {{ pay.WOF_rate }}</div>
             </div>
             <div class="row">
               <div class="col-6 col-md-6 text-success">Gross Earnings</div>
