@@ -74,6 +74,7 @@ def upload_file(request):
                 employee = Employee.objects.get(emp_code=i)
                 days_worked = 0
                 absent_days = 0
+                paid_leave = 0
                 ot = 0
                 wof_hours = 0
                 total_days[i] = len(j)
@@ -119,12 +120,16 @@ def upload_file(request):
                                 days_worked += 1
                             else:
                                 absent_days+=1
+                    elif status == "PL" or "Pl":
+                        absent_days+=1
+                        paid_leave+=1
                                 
                 present[i] = days_worked
                 absent[i] = absent_days
                 basicpay_perday = float(employee.basic_pay) / 30
                 basicpay_perhour = basicpay_perday / 9
                 ot_amount = basicpay_perhour * ot * 1.25
+                paid_leave_amount = basicpay_perday*paid_leave
 
                 wof_rate = basicpay_perhour * wof_hours
 
@@ -133,7 +138,7 @@ def upload_file(request):
                 )
 
                 gross_salary = (
-                    total_earnings + float(employee.att_bonus) + ot_amount + wof_rate
+                    total_earnings + float(employee.att_bonus) + ot_amount + wof_rate + paid_leave_amount
                 )
 
                 total_deductions = float(
